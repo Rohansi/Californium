@@ -23,5 +23,5 @@
 [ ] - Particle engine
 [x] - Event timer
 [ ] - Better names for classes (fewer managers, etc)
-[x] - Convert engine to a class library
+[ ] - Documentation
 [ ] - Try and fix the high framerate freezing
