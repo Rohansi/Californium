@@ -1,0 +1,27 @@
+[x] - View + Entity Tracking
+   [ ] - Smooth camera
+[x] - More dynamic TileMap
+[x] - Bounding box for entities
+[x] - Single PlaceFree function that checks both tiles and entities
+[x] - Optimize tile rendering with VertexArray chunking
+   [x] - Automatic dirty marking
+[x] - Proper state management (stack, ability to disable update/draw when not active)
+[x] - Event driven input
+   [x] - Mouse events
+[x] - Make HUD and UI possible with state local views
+[x] - Music
+[ ] - Stores rects instead of points in EntityManager
+[x] - Timer
+   [x] - Better names please
+[x] - Improve customizability
+   [x] - TileMap Tile and Chunk size
+   [x] - EntityManager grid size
+   [x] - Sound and music volume
+   [x] - Asset folders
+   [x] - RenderWindow options (res, framerate, vsync)
+[x] - Font stuff
+[ ] - Particle engine
+[x] - Event timer
+[ ] - Better names for classes (fewer managers, etc)
+[x] - Convert engine to a class library
+[ ] - Try and fix the high framerate freezing
