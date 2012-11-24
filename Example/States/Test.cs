@@ -16,19 +16,22 @@ namespace Example.States
 
         public Test()
         {
+            const int width = 10;
+            const int height = 10;
+
             camera = new Camera(Game.DefaultView);
             player = new Player(new Vector2f(100, 100));
 
             Entities.Add(player);
 
-            var random = new Random();
-            Map = new TileMap(1000, 1000, "Tiles.png");
+            var random = new Random(0);
+            Map = new TileMap(width, height, "Tiles.png");
 
-            for (int y = 0; y < 1000; y++)
+            for (int y = 0; y < height; y++)
             {
-                for (int x = 0; x < 1000; x++)
+                for (int x = 0; x < width; x++)
                 {
-                    if (y == 0 || x == 0 || x == 999 || y == 999)
+                    if (y == 0 || x == 0 || x == width - 1 || y == height - 1)
                     {
                         Map[x, y] = new Tile(0, false);
                     }
@@ -41,6 +44,10 @@ namespace Example.States
                     }
                 }
             }
+
+            var view = new View(Game.Window.DefaultView);
+            view.Center = new Vector2f(1000, 1000.0f);
+            Game.Window.SetView(view);
         }
 
         public override void Update(float dt)
@@ -57,6 +64,11 @@ namespace Example.States
 
             Map.Draw(rt);
             base.Draw(rt);
+        }
+
+        public override void Resize(Vector2f newSize)
+        {
+            camera = new Camera(Game.DefaultView);
         }
     }
 }

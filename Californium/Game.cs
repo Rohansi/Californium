@@ -14,10 +14,16 @@ namespace Californium
 
         public static View DefaultView
         {
-            get { return Window.DefaultView; }
+            get
+            {
+                var view = Window.DefaultView;
+                view.Size = size;
+                return view;
+            }
         }
 
         private static List<State> states;
+        private static Vector2f size;
 
         static Game()
         {
@@ -26,11 +32,18 @@ namespace Californium
 
         public static void Initialize()
         {
-            Window = new RenderWindow(new VideoMode(GameOptions.Width, GameOptions.Height), GameOptions.Caption, Styles.Close);
+            var style = Styles.Titlebar | Styles.Close;
+            if (GameOptions.Resizable)
+                style |= Styles.Resize;
+
+            size = new Vector2f(GameOptions.Width, GameOptions.Height);
+
+            Window = new RenderWindow(new VideoMode(GameOptions.Width, GameOptions.Height), GameOptions.Caption, style);
             Window.SetFramerateLimit(GameOptions.Framerate);
             Window.SetVerticalSyncEnabled(GameOptions.Vsync);
 
             Window.Closed += (sender, args) => Window.Close();
+            Window.Resized += (sender, args) => Resize(new Vector2f(args.Width, args.Height));
             Window.KeyPressed += (sender, args) => DispatchEvent(new KeyInputArgs(args.Code, true, args.Control, args.Shift));
             Window.KeyReleased += (sender, args) => DispatchEvent(new KeyInputArgs(args.Code, false, args.Control, args.Shift));
             Window.MouseButtonPressed += (sender, args) => DispatchEvent(new MouseButtonInputArgs(args.Button, true, args.X, args.Y));
@@ -93,6 +106,16 @@ namespace Californium
             for (int i = states.Count - 1; i >= 0; i--)
             {
                 if (states[i].ProcessEvent(args)) return;
+            }
+        }
+
+        private static void Resize(Vector2f newSize)
+        {
+            size = newSize;
+
+            foreach (var state in states)
+            {
+                state.Resize(newSize);
             }
         }
     }

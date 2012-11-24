@@ -20,8 +20,8 @@
    [x] - Asset folders
    [x] - RenderWindow options (res, framerate, vsync)
 [x] - Font stuff
+[x] - Window resizing
 [ ] - Particle engine
-[x] - Event timer
 [ ] - Better names for classes (fewer managers, etc)
 [ ] - Documentation
 [ ] - Try and fix the high framerate freezing

@@ -51,5 +51,10 @@ namespace Californium
         {
             return Entities.ProcessInput(args);
         }
+
+        public virtual void Resize(Vector2f newSize)
+        {
+            
+        }
     }
 }

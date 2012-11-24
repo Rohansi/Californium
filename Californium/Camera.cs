@@ -29,13 +29,18 @@ namespace Californium
             }
             else
             {
-                actualPosition = Position;
+                actualPosition = new Vector2f((float)Math.Round(Position.X), (float)Math.Round(Position.Y));
             }
         }
 
         public void Draw(RenderTarget rt)
         {
-            view.Center = actualPosition;
+            // if the view height is odd we need to offset the view to prevent buggy rendering
+            var offset = new Vector2f();
+            /*if ((int)view.Size.Y % 2 != 0)
+                offset.Y = 0.5f;*/
+
+            view.Center = actualPosition + offset;
             rt.SetView(view);
         }
     }
