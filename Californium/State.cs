@@ -20,6 +20,7 @@ namespace Californium
             All = Input | Update | Draw
         }
 
+        public Camera Camera;
         public EntityManager Entities;
         public TileMap Map;
 
@@ -28,6 +29,7 @@ namespace Californium
 
         protected State()
         {
+            InitializeCamera();
             Entities = new EntityManager(this);
             InactiveMode = FrameStep.All;
         }
@@ -37,13 +39,25 @@ namespace Californium
             return Map.PlaceFree(r) && Entities.PlaceFree(r);
         }
 
-        public virtual void Update(float dt)
+        internal void UpdateInternal(float dt)
         {
             Entities.Update(dt);
+            Update(dt);
+            Camera.Update(dt);
+        }
+
+        public virtual void Update(float dt)
+        {
+            
         }
 
         public virtual void Draw(RenderTarget rt)
         {
+            Camera.Apply(rt);
+
+            if (Map != null)
+                Map.Draw(rt);
+
             rt.Draw(Entities);
         }
 
@@ -52,9 +66,9 @@ namespace Californium
             return Entities.ProcessInput(args);
         }
 
-        public virtual void Resize(Vector2f newSize)
+        public virtual void InitializeCamera()
         {
-            
+            Camera = new Camera(Game.DefaultView);
         }
     }
 }

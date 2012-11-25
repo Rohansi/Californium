@@ -21,6 +21,10 @@
    [x] - RenderWindow options (res, framerate, vsync)
 [x] - Font stuff
 [x] - Window resizing
+[x] - Camera per State
+   [x] - Fix mouse input to provide proper coords
+   [x] - Provide camera bounds
+[ ] - Semi fixed timestep
 [ ] - Particle engine
 [ ] - Better names for classes (fewer managers, etc)
 [ ] - Documentation

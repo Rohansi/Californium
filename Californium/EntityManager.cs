@@ -132,10 +132,10 @@ namespace Californium
 
         public IEnumerable<Entity> InArea(FloatRect rect)
         {
-            int startX = ((int)rect.Left / GameOptions.EntityGridSize);
-            int startY = ((int)rect.Top / GameOptions.EntityGridSize);
-            int width = ((int)rect.Width / GameOptions.EntityGridSize) + 1;
-            int height = ((int)rect.Height / GameOptions.EntityGridSize) + 1;
+            int startX = ((int)rect.Left / GameOptions.EntityGridSize) - 1;
+            int startY = ((int)rect.Top / GameOptions.EntityGridSize) - 1;
+            int width = ((int)rect.Width / GameOptions.EntityGridSize) + 2;
+            int height = ((int)rect.Height / GameOptions.EntityGridSize) + 2;
 
             var pos = new Vector2i();
 

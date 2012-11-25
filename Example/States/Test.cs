@@ -11,15 +11,13 @@ namespace Example.States
 {
     class Test : State
     {
-        private Camera camera;
         private Player player;
 
         public Test()
         {
-            const int width = 10;
-            const int height = 10;
+            const int width = 100;
+            const int height = 100;
 
-            camera = new Camera(Game.DefaultView);
             player = new Player(new Vector2f(100, 100));
 
             Entities.Add(player);
@@ -38,37 +36,32 @@ namespace Example.States
                     else if (x > 20 || y > 20)
                     {
                         if (random.NextDouble() > 0.8)
-                        {
                             Map[x, y] = new Tile(1 + random.Next(3), true);
-                        }
                     }
                 }
             }
-
-            var view = new View(Game.Window.DefaultView);
-            view.Center = new Vector2f(1000, 1000.0f);
-            Game.Window.SetView(view);
         }
 
         public override void Update(float dt)
         {
-            base.Update(dt);
-
-            camera.Position = player.Position;
-            camera.Update(dt);
+            Camera.Position = player.Position;
         }
 
-        public override void Draw(RenderTarget rt)
+        public override bool ProcessEvent(InputArgs args)
         {
-            camera.Draw(rt);
+            var e = args as MouseButtonInputArgs;
+            if (e != null && e.Button == Mouse.Button.Left && e.Pressed)
+            {
+                int x = (int)e.Position.X / GameOptions.TileSize;
+                int y = (int)e.Position.Y / GameOptions.TileSize;
 
-            Map.Draw(rt);
-            base.Draw(rt);
-        }
+                if (x >= 0 && x < Map.Width && y >= 0 && y < Map.Height)
+                    Map[x, y] = new Tile(500, false);
 
-        public override void Resize(Vector2f newSize)
-        {
-            camera = new Camera(Game.DefaultView);
+                return true;
+            }
+            
+            return base.ProcessEvent(args);
         }
     }
 }

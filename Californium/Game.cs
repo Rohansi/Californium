@@ -70,7 +70,7 @@ namespace Californium
                     var state = states[i];
 
                     if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.FrameStep.Update))
-                        state.Update(dt);
+                        state.UpdateInternal(dt);
 
                     if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.FrameStep.Draw))
                     {
@@ -105,7 +105,11 @@ namespace Californium
         {
             for (int i = states.Count - 1; i >= 0; i--)
             {
-                if (states[i].ProcessEvent(args)) return;
+                var state = states[i];
+
+                args.View = state.Camera.View;
+                if (states[i].ProcessEvent(args))
+                    return;
             }
         }
 
@@ -115,7 +119,7 @@ namespace Californium
 
             foreach (var state in states)
             {
-                state.Resize(newSize);
+                state.InitializeCamera();
             }
         }
     }

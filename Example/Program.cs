@@ -15,6 +15,7 @@ namespace Example
 
             Game.Initialize();
             Game.SetState(new States.Test());
+            Game.PushState(new States.UserInterface());
             Game.Run();
         }
     }

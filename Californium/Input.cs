@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SFML.Graphics;
 using SFML.Window;
 
 namespace Californium
@@ -60,7 +61,10 @@ namespace Californium
         }
     }
 
-    public abstract class InputArgs { }
+    public abstract class InputArgs
+    {
+        internal View View;
+    }
 
     public class KeyInputArgs : InputArgs
     {
@@ -82,41 +86,38 @@ namespace Californium
     {
         public Mouse.Button Button { get; protected set; }
         public bool Pressed { get; protected set; }
-        public int X { get; protected set; }
-        public int Y { get; protected set; }
+        public Vector2f Position { get { return Game.Window.MapPixelToCoords(screenPosition, View); } }
+        private Vector2i screenPosition;
 
         public MouseButtonInputArgs(Mouse.Button button, bool pressed, int x, int y)
         {
             Button = button;
             Pressed = pressed;
-            X = x;
-            Y = y;
+            screenPosition = new Vector2i(x, y);
         }
     }
 
     public class MouseWheelInputArgs : InputArgs
     {
         public int Delta { get; protected set; }
-        public int X { get; protected set; }
-        public int Y { get; protected set; }
+        public Vector2f Position { get { return Game.Window.MapPixelToCoords(screenPosition, View); } }
+        private Vector2i screenPosition;
 
         public MouseWheelInputArgs(int delta, int x, int y)
         {
             Delta = delta;
-            X = x;
-            Y = y;
+            screenPosition = new Vector2i(x, y);
         }
     }
 
     public class MouseMoveInputArgs : InputArgs
     {
-        public int X { get; protected set; }
-        public int Y { get; protected set; }
+        public Vector2f Position { get { return Game.Window.MapPixelToCoords(screenPosition, View); } }
+        private Vector2i screenPosition;
 
         public MouseMoveInputArgs(int x, int y)
         {
-            X = x;
-            Y = y;
+            screenPosition = new Vector2i(x, y);
         }
     }
 }
