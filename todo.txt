@@ -26,6 +26,7 @@
    [x] - Provide camera bounds
 [x] - Input instance for states
 [ ] - Semi fixed timestep
+[ ] - Animations
 [ ] - Platformer example
 [ ] - Combine resource managers
 [ ] - Documentation

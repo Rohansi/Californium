@@ -12,13 +12,8 @@ namespace Californium
     {
         private const float CleanupEvery = 60.0f;
 
-        public ReadOnlyCollection<Entity> Entities
-        {
-            get { return entities.AsReadOnly(); }
-        }
-
         private List<Entity> entities;
-        private List<Entity> inputEntities; 
+        private List<Entity> inputEntities;
 
         private Dictionary<Vector2i, List<Entity>> entityGrid;
         private float cleanupTimer;
@@ -132,10 +127,13 @@ namespace Californium
 
         public IEnumerable<Entity> InArea(FloatRect rect)
         {
-            int startX = ((int)rect.Left / GameOptions.EntityGridSize) - 1;
-            int startY = ((int)rect.Top / GameOptions.EntityGridSize) - 1;
-            int width = ((int)rect.Width / GameOptions.EntityGridSize) + 2;
-            int height = ((int)rect.Height / GameOptions.EntityGridSize) + 2;
+            rect = new FloatRect(rect.Left - GameOptions.EntityOverscan, rect.Top - GameOptions.EntityOverscan,
+                                 rect.Width + (GameOptions.EntityOverscan * 2), rect.Height + (GameOptions.EntityOverscan * 2));
+
+            int startX = (int)rect.Left / GameOptions.EntityGridSize;
+            int startY = (int)rect.Top / GameOptions.EntityGridSize;
+            int width = (int)rect.Width / GameOptions.EntityGridSize;
+            int height = (int)rect.Height / GameOptions.EntityGridSize;
 
             var pos = new Vector2i();
 
@@ -158,11 +156,9 @@ namespace Californium
             }
         }
 
-        public bool PlaceFree(FloatRect r, float overScan = 64f)
+        public bool PlaceFree(FloatRect rect)
         {
-            var region = new FloatRect(r.Left - overScan, r.Top - overScan, r.Width + (overScan * 2), r.Height + (overScan * 2));
-
-            return InArea(region).All(entity => entity == currentEntity || !entity.Solid || !entity.BoundingBox.Intersects(r));
+            return InArea(rect).All(entity => entity == currentEntity || !entity.Solid || !entity.BoundingBox.Intersects(rect));
         }
 
         internal void AddInput(Entity e)

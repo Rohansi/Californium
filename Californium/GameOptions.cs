@@ -27,5 +27,6 @@ namespace Californium
         public static int TileChunkSize = 32;
 
         public static int EntityGridSize = 64;
+        public static float EntityOverscan = 64;
     }
 }
