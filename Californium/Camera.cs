@@ -46,12 +46,7 @@ namespace Californium
 
         public void Apply(RenderTarget rt)
         {
-            // if the view height is odd we need to offset the view to prevent buggy rendering
-            var offset = new Vector2f();
-            if ((int)View.Size.Y % 2 != 0)
-                offset.Y = 0.5f;
-
-            View.Center = actualPosition + offset;
+            View.Center = actualPosition;
             rt.SetView(View);
         }
     }

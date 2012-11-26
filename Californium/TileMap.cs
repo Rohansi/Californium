@@ -63,8 +63,12 @@ namespace Californium
                         uint last = vertexArray.VertexCount;
                         vertexArray.Resize(vertexArray.VertexCount + 4);
 
-                        int texX = (tiles[x, y].Index % tileMapWidth) * GameOptions.TileSize;
-                        int texY = (tiles[x, y].Index / tileMapWidth) * GameOptions.TileSize;
+                        int itexX = (tiles[x, y].Index % tileMapWidth) * GameOptions.TileSize;
+                        int itexY = (tiles[x, y].Index / tileMapWidth) * GameOptions.TileSize;
+
+                        // HACK: SFML's weird rendering
+                        float texX = itexX + 0.01f;
+                        float texY = itexY - 0.01f;
 
                         vertexArray[last + 0] = new Vertex(new Vector2f(x * GameOptions.TileSize, y * GameOptions.TileSize),
                                                            new Vector2f(texX, texY));
