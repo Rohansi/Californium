@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using SFML.Graphics;
@@ -16,6 +17,8 @@ namespace Californium
 
         public Dictionary<Keyboard.Key, KeyEvent> Key;
         public Dictionary<Mouse.Button, MouseButtonEvent> MouseButton;
+	    internal static Dictionary<Keyboard.Key, Stopwatch> KeyDuration;
+	    internal static Dictionary<Mouse.Button, Stopwatch> ButtonDuration; 
         public MouseWheelEvent MouseWheel;
         public MouseMoveEvent MouseMove;
 
@@ -23,6 +26,8 @@ namespace Californium
         {
             Key = new Dictionary<Keyboard.Key, KeyEvent>();
             MouseButton = new Dictionary<Mouse.Button, MouseButtonEvent>();
+			KeyDuration = new Dictionary<Keyboard.Key, Stopwatch>();
+			ButtonDuration = new Dictionary<Mouse.Button, Stopwatch>();
             MouseWheel = null;
             MouseMove = null;
         }
@@ -64,6 +69,7 @@ namespace Californium
     public abstract class InputArgs
     {
         internal View View;
+	    public TimeSpan Duration { get; protected set; }
     }
 
     public class KeyInputArgs : InputArgs
@@ -76,9 +82,31 @@ namespace Californium
         public KeyInputArgs(Keyboard.Key key, bool pressed, bool control, bool shift)
         {
             Key = key;
-            Pressed = pressed;
+	        Pressed = pressed;
             Control = control;
             Shift = shift;
+
+			if (pressed)
+			{
+				Duration = TimeSpan.Zero;
+
+				if (Input.KeyDuration.ContainsKey(key))
+					Input.KeyDuration[key].Restart();
+				else
+				{
+					Input.KeyDuration.Add(key, new Stopwatch());
+					Input.KeyDuration[key].Start();
+				}
+			}
+			else
+			{
+				if (Input.KeyDuration.ContainsKey(key))
+				{
+					Duration = Input.KeyDuration[key].Elapsed;
+					Input.KeyDuration[key].Reset();
+				}
+				else Input.KeyDuration.Add(key, new Stopwatch());
+			}
         }
     }
 
@@ -92,8 +120,30 @@ namespace Californium
         public MouseButtonInputArgs(Mouse.Button button, bool pressed, int x, int y)
         {
             Button = button;
-            Pressed = pressed;
+	        Pressed = pressed;
             screenPosition = new Vector2i(x, y);
+
+			if (pressed)
+			{
+				Duration = TimeSpan.Zero;
+
+				if (Input.ButtonDuration.ContainsKey(button))
+					Input.ButtonDuration[button].Restart();
+				else
+				{
+					Input.ButtonDuration.Add(button, new Stopwatch());
+					Input.ButtonDuration[button].Start();
+				}
+			}
+			else
+			{
+				if (Input.ButtonDuration.ContainsKey(button))
+				{
+					Duration = Input.ButtonDuration[button].Elapsed;
+					Input.ButtonDuration[button].Reset();
+				}
+				else Input.ButtonDuration.Add(button, new Stopwatch());
+			}
         }
     }
 

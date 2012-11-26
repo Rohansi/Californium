@@ -51,8 +51,9 @@ namespace Example.States
                 if (x >= 0 && x < Map.Width && y >= 0 && y < Map.Height)
                     Map[x, y] = new Tile(500, false);
 
+				Console.WriteLine(args.Duration.ToString());
+
                 return true;
-                
             };
         }
 
