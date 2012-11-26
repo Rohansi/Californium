@@ -9,12 +9,14 @@ using Example.Entities;
 
 namespace Example.States
 {
-    class Test : State
+    class Example : State
     {
         private Player player;
 
-        public Test()
+        public Example()
         {
+            ClearColor = new Color(100, 149, 237);
+
             const int width = 100;
             const int height = 100;
 
@@ -22,7 +24,7 @@ namespace Example.States
 
             Entities.Add(player);
 
-            var random = new Random(0);
+            var random = new Random();
             Map = new TileMap(width, height, "Tiles.png");
 
             for (int y = 0; y < height; y++)
@@ -40,6 +42,18 @@ namespace Example.States
                     }
                 }
             }
+
+            Input.MouseButton[Mouse.Button.Left] = args =>
+            {
+                int x = (int)args.Position.X / GameOptions.TileSize;
+                int y = (int)args.Position.Y / GameOptions.TileSize;
+
+                if (x >= 0 && x < Map.Width && y >= 0 && y < Map.Height)
+                    Map[x, y] = new Tile(500, false);
+
+                return true;
+                
+            };
         }
 
         public override void Update(float dt)
@@ -47,21 +61,10 @@ namespace Example.States
             Camera.Position = player.Position;
         }
 
-        public override bool ProcessEvent(InputArgs args)
+        public override void InitializeCamera()
         {
-            var e = args as MouseButtonInputArgs;
-            if (e != null && e.Button == Mouse.Button.Left && e.Pressed)
-            {
-                int x = (int)e.Position.X / GameOptions.TileSize;
-                int y = (int)e.Position.Y / GameOptions.TileSize;
-
-                if (x >= 0 && x < Map.Width && y >= 0 && y < Map.Height)
-                    Map[x, y] = new Tile(500, false);
-
-                return true;
-            }
-            
-            return base.ProcessEvent(args);
+            base.InitializeCamera();
+            Camera.Zoom(0.5f);
         }
     }
 }

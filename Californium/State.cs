@@ -27,6 +27,12 @@ namespace Californium
         public FrameStep InactiveMode { get; protected set; }
         public Color ClearColor { get; protected set; }
 
+        private Input input;
+        public Input Input
+        {
+            get { return input ?? (input = new Input()); }
+        }
+
         protected State()
         {
             InitializeCamera();
@@ -63,6 +69,8 @@ namespace Californium
 
         public virtual bool ProcessEvent(InputArgs args)
         {
+            if (input != null && input.ProcessInput(args))
+                return true;
             return Entities.ProcessInput(args);
         }
 

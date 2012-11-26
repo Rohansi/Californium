@@ -14,11 +14,5 @@ namespace Example.States
         {
             Entities.Add(new Entities.Panel());
         }
-
-        public override void InitializeCamera()
-        {
-            base.InitializeCamera();
-            Camera.Zoom(0.5f);
-        }
     }
 }

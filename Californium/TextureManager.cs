@@ -14,7 +14,7 @@ namespace Californium
             textures = new Dictionary<string, Texture>();
         }
 
-        public static Texture Load(string fname, bool persistent = false)
+        public static Texture Load(string fname)
         {
             Texture t;
 

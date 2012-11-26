@@ -24,8 +24,9 @@
 [x] - Camera per State
    [x] - Fix mouse input to provide proper coords
    [x] - Provide camera bounds
+[x] - Input instance for states
 [ ] - Semi fixed timestep
-[ ] - Particle engine
-[ ] - Better names for classes (fewer managers, etc)
+[ ] - Platformer example
+[ ] - Combine resource managers
 [ ] - Documentation
-[ ] - Try and fix the high framerate freezing
+[ ] - Particle engine

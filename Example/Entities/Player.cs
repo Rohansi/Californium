@@ -10,9 +10,9 @@ namespace Example.Entities
 {
     class Player : Entity
     {
-        private const int size = 8;
+        private const int SpriteSize = 8;
 
-        private RectangleShape shape;
+        private Sprite sprite;
 
         private float hSave, vSave;
         private bool keyW, keyA, keyS, keyD;
@@ -21,11 +21,11 @@ namespace Example.Entities
         {
             Solid = true;
             Position = position;
-            Origin = new Vector2f(size / 2, size / 2);
-            Size = new Vector2f(size, size);
+            Origin = new Vector2f(SpriteSize / 2, SpriteSize / 2);
+            Size = new Vector2f(SpriteSize, SpriteSize);
 
-            shape = new RectangleShape(Size);
-            shape.Origin = Origin;
+            sprite = new Sprite(TextureManager.Load("Player.png"));
+            sprite.Origin = Origin;
 
             Input.Key[Keyboard.Key.W] = args => keyW = args.Pressed;
             Input.Key[Keyboard.Key.A] = args => keyA = args.Pressed;
@@ -35,7 +35,7 @@ namespace Example.Entities
 
         public override void Update(float dt)
         {
-            const float speed = 500;
+            const float speed = 200;
 
             float hMove = speed * Direction(keyA, keyD) * dt;
             float vMove = speed * Direction(keyW, keyS) * dt;
@@ -87,8 +87,8 @@ namespace Example.Entities
 
         public override void Draw(RenderTarget rt)
         {
-            shape.Position = Position;
-            rt.Draw(shape);
+            sprite.Position = Position;
+            rt.Draw(sprite);
         }
 
         private static float Direction(bool neg, bool pos)
