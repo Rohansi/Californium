@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Californium;
-using SFML.Graphics;
-using SFML.Window;
+﻿using Californium;
 
 namespace Example.States
 {

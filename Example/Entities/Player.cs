@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Californium;
 using SFML.Graphics;
 using SFML.Window;
@@ -24,8 +21,7 @@ namespace Example.Entities
             Origin = new Vector2f(SpriteSize / 2, SpriteSize / 2);
             Size = new Vector2f(SpriteSize, SpriteSize);
 
-            sprite = new Sprite(TextureManager.Load("Player.png"));
-            sprite.Origin = Origin;
+            sprite = new Sprite(TextureManager.Load("Player.png")) { Origin = Origin };
 
             Input.Key[Keyboard.Key.W] = args => keyW = args.Pressed;
             Input.Key[Keyboard.Key.A] = args => keyA = args.Pressed;

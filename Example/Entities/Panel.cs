@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Californium;
+﻿using Californium;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -17,7 +13,7 @@ namespace Example.Entities
         {
             Size = new Vector2f(100, 100);
             Position = new Vector2f(10, 10);
-            
+
             Input.MouseButton[Mouse.Button.Left] = args =>
             {
                 var pos = args.Position;
@@ -61,10 +57,7 @@ namespace Example.Entities
 
         public override void Draw(RenderTarget rt)
         {
-            var shape = new RectangleShape(Size);
-            shape.FillColor = new Color(255, 255, 255, 128);
-            shape.Position = Position;
-
+            var shape = new RectangleShape(Size) { FillColor = new Color(255, 255, 255, 128), Position = Position };
             rt.Draw(shape);
         }
     }

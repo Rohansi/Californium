@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using SFML.Audio;
 
@@ -27,8 +26,7 @@ namespace Californium
                 buffers.Add(fname, sb);
             }
 
-            var s = new Sound(sb);
-            s.Volume = GameOptions.SoundVolume;
+            var s = new Sound(sb) { Volume = GameOptions.SoundVolume };
             s.Play();
             sounds.Add(s);
 
