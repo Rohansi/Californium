@@ -10,7 +10,7 @@
    [x] - Mouse events
 [x] - Make HUD and UI possible with state local views
 [x] - Music
-[ ] - Stores rects instead of points in EntityManager
+[ ] - Store rects instead of points in EntityManager
 [x] - Timer
    [x] - Better names please
 [x] - Improve customizability
@@ -25,8 +25,8 @@
    [x] - Fix mouse input to provide proper coords
    [x] - Provide camera bounds
 [x] - Input instance for states
-[ ] - Semi fixed timestep
-[ ] - Animations
+[x] - Semi fixed timestep
+[x] - Animations
 [ ] - Platformer example
 [ ] - Combine resource managers
 [ ] - Documentation

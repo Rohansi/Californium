@@ -51,31 +51,59 @@ namespace Californium
 
         public static void Run()
         {
+            const int maxUpdates = 5;
+
             var timer = new Stopwatch();
+            var targetDt = 1 / ((float)GameOptions.Framerate / 2);
 
             while (Window.IsOpen())
             {
-                float dt = (float)timer.ElapsedMilliseconds / 1000;
+                float time = (float)timer.ElapsedMilliseconds / 1000;
                 timer.Restart();
 
-                Timer.Update(dt);
+                // Calculate semi fixed timestep with maximum updates per frame
+                List<float> updates = new List<float>();
+                if (time / targetDt > maxUpdates)
+                {
+                    for (int i = 0; i < maxUpdates; i++)
+                        updates.Add(time / maxUpdates);
+                }
+                else
+                {
+                    while (time > 0)
+                    {
+                        updates.Add(time > targetDt ? targetDt : time);
+                        time -= targetDt;
+                    }
+                }
 
-                Window.DispatchEvents();
+                // Update
+                foreach (var dt in updates)
+                {
+                    Window.DispatchEvents();
+                    Timer.Update(dt);
 
+                    for (int i = 0; i < states.Count; i++)
+                    {
+                        var state = states[i];
+
+                        if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.FrameStep.Update))
+                            state.UpdateInternal(dt);
+                    }
+                }
+
+                // Draw
                 for (int i = 0; i < states.Count; i++)
                 {
                     var state = states[i];
 
-                    if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.FrameStep.Update))
-                        state.UpdateInternal(dt);
+                    if (i != states.Count - 1 && !state.InactiveMode.HasFlag(State.FrameStep.Draw))
+                        continue;
 
-                    if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.FrameStep.Draw))
-                    {
-                        if (i == 0)
-                            Window.Clear(state.ClearColor);
+                    if (i == 0)
+                        Window.Clear(state.ClearColor);
 
-                        state.Draw(Window);
-                    }
+                    state.Draw(Window);
                 }
 
                 Window.Display();
