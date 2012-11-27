@@ -7,6 +7,11 @@ namespace Californium
 {
     public static class Utility
     {
+        public static float Clamp(float value, float min, float max)
+        {
+            return (value < min) ? min : ((value > max) ? max : value);
+        }
+
         public static float ToDegrees(float dir)
         {
             return dir * (180 / (float)Math.PI);

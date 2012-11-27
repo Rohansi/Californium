@@ -14,6 +14,8 @@ namespace Example.Entities
         private float hSave, vSave;
         private bool keyW, keyA, keyS, keyD;
 
+        private float hSpeed, vSpeed;
+
         public Player(Vector2f position)
         {
             Solid = true;
@@ -31,24 +33,40 @@ namespace Example.Entities
 
         public override void Update(float dt)
         {
-            const float speed = 200;
+            const float maxHSpeed = 100;
+            const float maxVSpeed = 150;
+            const float speed = 75;
+            const float jumpSpeed = 7;
+            const float gravity = 25;
+            const float friction = 20;
 
-            float hMove = speed * Direction(keyA, keyD) * dt;
-            float vMove = speed * Direction(keyW, keyS) * dt;
+            if (keyA) hSpeed -= speed * dt;
+            if (keyD) hSpeed += speed * dt;
 
-            int hRep = (int)Math.Floor(Math.Abs(hMove));
-            int vRep = (int)Math.Floor(Math.Abs(vMove));
+            hSpeed *= 1 - (friction * dt);
+            hSpeed = Utility.Clamp(hSpeed, -maxHSpeed, maxHSpeed);
 
-            hSave += (float)(Math.Abs(hMove) - Math.Floor(Math.Abs(hMove)));
-            vSave += (float)(Math.Abs(vMove) - Math.Floor(Math.Abs(vMove)));
+            var bounds = BoundingBox;
+            bounds.Top++;
 
-            while (hSave >= 1.0)
+            if (keyW && !Parent.PlaceFree(bounds)) vSpeed -= jumpSpeed;
+
+            vSpeed += gravity * dt;
+            vSpeed = Utility.Clamp(vSpeed, -maxVSpeed, maxVSpeed);
+
+            int hRep = (int)Math.Floor(Math.Abs(hSpeed));
+            int vRep = (int)Math.Floor(Math.Abs(vSpeed));
+
+            hSave += (float)(Math.Abs(hSpeed) - Math.Floor(Math.Abs(hSpeed)));
+            vSave += (float)(Math.Abs(vSpeed) - Math.Floor(Math.Abs(vSpeed)));
+
+            while (hSave >= 1)
             {
                 --hSave;
                 ++hRep;
             }
 
-            while (vSave >= 1.0)
+            while (vSave >= 1)
             {
                 --vSave;
                 ++vRep;
@@ -57,27 +75,29 @@ namespace Example.Entities
             var testRect = BoundingBox;
             while (hRep-- > 0)
             {
-                testRect.Left += Math.Sign(hMove);
+                testRect.Left += Math.Sign(hSpeed);
                 if (!Parent.PlaceFree(testRect))
                 {
                     hSave = 0;
+                    hSpeed = 0;
                     break;
                 }
 
-                Position.X += Math.Sign(hMove);
+                Position.X += Math.Sign(hSpeed);
             }
 
             testRect = BoundingBox;
             while (vRep-- > 0)
             {
-                testRect.Top += Math.Sign(vMove);
+                testRect.Top += Math.Sign(vSpeed);
                 if (!Parent.PlaceFree(testRect))
                 {
                     vSave = 0;
+                    vSpeed = 0;
                     break;
                 }
 
-                Position.Y += Math.Sign(vMove);
+                Position.Y += Math.Sign(vSpeed);
             }
         }
 

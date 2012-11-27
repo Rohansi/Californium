@@ -30,11 +30,11 @@ namespace Example.States
                 {
                     if (y == 0 || x == 0 || x == width - 1 || y == height - 1)
                     {
-                        Map[x, y] = new Tile(0, false);
+                        Map[x, y] = new Tile(0, true);
                     }
                     else if (x > 20 || y > 20)
                     {
-                        if (random.NextDouble() > 0.8)
+                        if (random.NextDouble() > 0.9)
                             Map[x, y] = new Tile(1 + random.Next(3), true);
                     }
                 }
