@@ -48,7 +48,7 @@ namespace Example.Entities
             const float maxVSpeed = 750;
             const float acceleration = 5000;
             const float jumpPotential = 600;
-            const float jumpDrain = 5000;
+            const float jumpSpeed = 200;
             const float gravity = 2000;
             const float friction = 25;
 
@@ -58,11 +58,13 @@ namespace Example.Entities
             hSpeed *= (float)Math.Exp(-friction * dt);
             hSpeed = Utility.Clamp(hSpeed, -maxHSpeed, maxHSpeed);
 
-            var bounds = BoundingBox;
-            bounds.Top++;
+            vSpeed += gravity * dt;
 
             if (canJump)
             {
+                var bounds = BoundingBox;
+                bounds.Top++;
+
                 if (!Parent.PlaceFree(bounds))
                     jumpEnergy = jumpPotential;
                 canJump = false;
@@ -70,12 +72,11 @@ namespace Example.Entities
 
             if (keyW && jumpEnergy > 0)
             {
-                float usedEnergy = Math.Min(jumpDrain * dt, jumpEnergy);
+                float usedEnergy = Math.Min(jumpSpeed + vSpeed, jumpEnergy);
                 jumpEnergy -= usedEnergy;
                 vSpeed -= usedEnergy;
             }
 
-            vSpeed += gravity * dt;
             vSpeed = Utility.Clamp(vSpeed, -maxVSpeed, maxVSpeed);
 
             float hMove = hSpeed * dt;
