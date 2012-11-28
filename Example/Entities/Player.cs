@@ -15,6 +15,8 @@ namespace Example.Entities
         private bool keyW, keyA, keyS, keyD;
 
         private float hSpeed, vSpeed;
+        private bool canJump;
+        private float jumpEnergy;
 
         public Player(Vector2f position)
         {
@@ -25,23 +27,33 @@ namespace Example.Entities
 
             sprite = new Sprite(TextureManager.Load("Player.png")) { Origin = Origin };
 
-            Input.Key[Keyboard.Key.W] = args => keyW = args.Pressed;
-            Input.Key[Keyboard.Key.A] = args => keyA = args.Pressed;
-            Input.Key[Keyboard.Key.S] = args => keyS = args.Pressed;
-            Input.Key[Keyboard.Key.D] = args => keyD = args.Pressed;
+            Input.Key[Keyboard.Key.W] = args =>
+            {
+                keyW = args.Pressed;
+                if (args.Pressed)
+                    canJump = true;
+                else
+                    jumpEnergy = 0;
+                return true;
+            };
+
+            Input.Key[Keyboard.Key.A] = args => { keyA = args.Pressed; return true; };
+            Input.Key[Keyboard.Key.S] = args => { keyS = args.Pressed; return true; };
+            Input.Key[Keyboard.Key.D] = args => { keyD = args.Pressed; return true; };
         }
 
         public override void Update(float dt)
         {
-            const float maxHSpeed = 1500;
-            const float maxVSpeed = 2000;
-            const float speed = 5000;
-            const float jumpSpeed = 500;
+            const float maxHSpeed = 500;
+            const float maxVSpeed = 750;
+            const float acceleration = 5000;
+            const float jumpPotential = 600;
+            const float jumpDrain = 5000;
             const float gravity = 2000;
             const float friction = 25;
 
-            if (keyA) hSpeed -= speed * dt;
-            if (keyD) hSpeed += speed * dt;
+            if (keyA) hSpeed -= acceleration * dt;
+            if (keyD) hSpeed += acceleration * dt;
 
             hSpeed *= (float)Math.Exp(-friction * dt);
             hSpeed = Utility.Clamp(hSpeed, -maxHSpeed, maxHSpeed);
@@ -49,7 +61,19 @@ namespace Example.Entities
             var bounds = BoundingBox;
             bounds.Top++;
 
-            if (keyW && !Parent.PlaceFree(bounds)) vSpeed -= jumpSpeed;
+            if (canJump)
+            {
+                if (!Parent.PlaceFree(bounds))
+                    jumpEnergy = jumpPotential;
+                canJump = false;
+            }
+
+            if (keyW && jumpEnergy > 0)
+            {
+                float usedEnergy = Math.Min(jumpDrain * dt, jumpEnergy);
+                jumpEnergy -= usedEnergy;
+                vSpeed -= usedEnergy;
+            }
 
             vSpeed += gravity * dt;
             vSpeed = Utility.Clamp(vSpeed, -maxVSpeed, maxVSpeed);

@@ -38,6 +38,7 @@ namespace Californium
             Window = new RenderWindow(new VideoMode(GameOptions.Width, GameOptions.Height), GameOptions.Caption, style);
             Window.SetFramerateLimit(GameOptions.Framerate);
             Window.SetVerticalSyncEnabled(GameOptions.Vsync);
+            Window.SetKeyRepeatEnabled(false);
 
             Window.Closed += (sender, args) => Window.Close();
             Window.Resized += (sender, args) => Resize(new Vector2f(args.Width, args.Height));
