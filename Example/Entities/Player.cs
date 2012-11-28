@@ -33,17 +33,17 @@ namespace Example.Entities
 
         public override void Update(float dt)
         {
-            const float maxHSpeed = 100;
-            const float maxVSpeed = 150;
-            const float speed = 75;
-            const float jumpSpeed = 7;
-            const float gravity = 25;
-            const float friction = 20;
+            const float maxHSpeed = 1500;
+            const float maxVSpeed = 2000;
+            const float speed = 5000;
+            const float jumpSpeed = 500;
+            const float gravity = 2000;
+            const float friction = 25;
 
             if (keyA) hSpeed -= speed * dt;
             if (keyD) hSpeed += speed * dt;
 
-            hSpeed *= 1 - (friction * dt);
+            hSpeed *= (float)Math.Exp(-friction * dt);
             hSpeed = Utility.Clamp(hSpeed, -maxHSpeed, maxHSpeed);
 
             var bounds = BoundingBox;
@@ -54,11 +54,14 @@ namespace Example.Entities
             vSpeed += gravity * dt;
             vSpeed = Utility.Clamp(vSpeed, -maxVSpeed, maxVSpeed);
 
-            int hRep = (int)Math.Floor(Math.Abs(hSpeed));
-            int vRep = (int)Math.Floor(Math.Abs(vSpeed));
+            float hMove = hSpeed * dt;
+            float vMove = vSpeed * dt;
 
-            hSave += (float)(Math.Abs(hSpeed) - Math.Floor(Math.Abs(hSpeed)));
-            vSave += (float)(Math.Abs(vSpeed) - Math.Floor(Math.Abs(vSpeed)));
+            int hRep = (int)Math.Floor(Math.Abs(hMove));
+            int vRep = (int)Math.Floor(Math.Abs(vMove));
+
+            hSave += (float)(Math.Abs(hMove) - Math.Floor(Math.Abs(hMove)));
+            vSave += (float)(Math.Abs(vMove) - Math.Floor(Math.Abs(vMove)));
 
             while (hSave >= 1)
             {
@@ -75,7 +78,7 @@ namespace Example.Entities
             var testRect = BoundingBox;
             while (hRep-- > 0)
             {
-                testRect.Left += Math.Sign(hSpeed);
+                testRect.Left += Math.Sign(hMove);
                 if (!Parent.PlaceFree(testRect))
                 {
                     hSave = 0;
@@ -83,13 +86,13 @@ namespace Example.Entities
                     break;
                 }
 
-                Position.X += Math.Sign(hSpeed);
+                Position.X += Math.Sign(hMove);
             }
 
             testRect = BoundingBox;
             while (vRep-- > 0)
             {
-                testRect.Top += Math.Sign(vSpeed);
+                testRect.Top += Math.Sign(vMove);
                 if (!Parent.PlaceFree(testRect))
                 {
                     vSave = 0;
@@ -97,7 +100,7 @@ namespace Example.Entities
                     break;
                 }
 
-                Position.Y += Math.Sign(vSpeed);
+                Position.Y += Math.Sign(vMove);
             }
         }
 
@@ -105,14 +108,6 @@ namespace Example.Entities
         {
             sprite.Position = Position;
             rt.Draw(sprite);
-        }
-
-        private static float Direction(bool neg, bool pos)
-        {
-            float res = 0;
-            if (neg) res -= 1;
-            if (pos) res += 1;
-            return res;
         }
     }
 }
