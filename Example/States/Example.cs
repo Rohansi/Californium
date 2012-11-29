@@ -14,8 +14,8 @@ namespace Example.States
         {
             ClearColor = new Color(100, 149, 237);
 
-            const int width = 100;
-            const int height = 100;
+            const int width = 20;
+            const int height = 20;
 
             player = new Player(new Vector2f(100, 100));
 

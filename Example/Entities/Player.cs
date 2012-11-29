@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Californium;
 using SFML.Graphics;
 using SFML.Window;
@@ -17,6 +18,8 @@ namespace Example.Entities
         private float hSpeed, vSpeed;
         private bool canJump;
         private float jumpEnergy;
+
+        private List<float> height;
 
         public Player(Vector2f position)
         {
@@ -40,6 +43,9 @@ namespace Example.Entities
             Input.Key[Keyboard.Key.A] = args => { keyA = args.Pressed; return true; };
             Input.Key[Keyboard.Key.S] = args => { keyS = args.Pressed; return true; };
             Input.Key[Keyboard.Key.D] = args => { keyD = args.Pressed; return true; };
+
+            height = new List<float>(400);
+            for (int i = 0; i < 400; i++) height.Add(0);
         }
 
         public override void Update(float dt)
@@ -75,6 +81,11 @@ namespace Example.Entities
                 float usedEnergy = Math.Min(jumpSpeed + vSpeed, jumpEnergy);
                 jumpEnergy -= usedEnergy;
                 vSpeed -= usedEnergy;
+
+                if (jumpEnergy <= 0)
+                {
+                    // jump done
+                }
             }
 
             vSpeed = Utility.Clamp(vSpeed, -maxVSpeed, maxVSpeed);
@@ -127,12 +138,24 @@ namespace Example.Entities
 
                 Position.Y += Math.Sign(vMove);
             }
+
+            height.RemoveAt(0);
+            height.Add(Position.Y);
         }
 
         public override void Draw(RenderTarget rt)
         {
             sprite.Position = Position;
             rt.Draw(sprite);
+
+            var s = new CircleShape(.5f);
+            s.FillColor = Color.Black;
+
+            for (int i = 0; i < height.Count; i++)
+            {
+                s.Position = new Vector2f(i, (height[i] / (20 * 8)) * 100);
+                rt.Draw(s);
+            }
         }
     }
 }
