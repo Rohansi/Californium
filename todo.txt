@@ -26,8 +26,12 @@
    [x] - Provide camera bounds
 [x] - Input instance for states
 [x] - Semi fixed timestep
+   [x] - Fixed timestep is better
 [x] - Animations
 [ ] - Platformer example
+   [ ] - Remove hSave and vSave
+   [ ] - Figure out how to do jumpthrough tiles
+[ ] - GameOptions as an immutable class passed to Game.Initialize
 [ ] - Combine resource managers
 [ ] - Documentation
 [ ] - Particle engine

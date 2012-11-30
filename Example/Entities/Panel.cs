@@ -45,7 +45,7 @@ namespace Example.Entities
             };
         }
 
-        public override void Update(float dt)
+        public override void Update()
         {
             var bounds = Parent.Camera.Bounds;
 

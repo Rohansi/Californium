@@ -28,7 +28,7 @@ namespace Californium
             View.Zoom(factor);
         }
 
-        public void Update(float dt)
+        public void Update()
         {
             // TODO: smooth camera
             if (IsSmooth)

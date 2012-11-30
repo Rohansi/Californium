@@ -36,14 +36,14 @@ namespace Californium
             timers.Add(new TimerInfo { Event = callback, StartTime = time, Time = time });
         }
 
-        public static void Update(float dt)
+        public static void Update()
         {
             List<TimerInfo> timersCopy = new List<TimerInfo>(timers);
             List<TimerInfo> toRemove = new List<TimerInfo>();
 
             foreach (var timer in timersCopy)
             {
-                timer.Time -= dt;
+                timer.Time -= GameOptions.Timestep;
                 if (timer.Time <= 0)
                 {
                     if (timer.Event())

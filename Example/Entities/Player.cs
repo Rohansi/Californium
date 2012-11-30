@@ -19,8 +19,6 @@ namespace Example.Entities
         private bool canJump;
         private float jumpEnergy;
 
-        private List<float> height;
-
         public Player(Vector2f position)
         {
             Solid = true;
@@ -43,28 +41,25 @@ namespace Example.Entities
             Input.Key[Keyboard.Key.A] = args => { keyA = args.Pressed; return true; };
             Input.Key[Keyboard.Key.S] = args => { keyS = args.Pressed; return true; };
             Input.Key[Keyboard.Key.D] = args => { keyD = args.Pressed; return true; };
-
-            height = new List<float>(400);
-            for (int i = 0; i < 400; i++) height.Add(0);
         }
 
-        public override void Update(float dt)
+        public override void Update()
         {
-            const float maxHSpeed = 500;
-            const float maxVSpeed = 750;
-            const float acceleration = 5000;
-            const float jumpPotential = 600;
-            const float jumpSpeed = 200;
-            const float gravity = 2000;
-            const float friction = 25;
+            const float maxHSpeed = 2.5f;
+            const float maxVSpeed = 6;
+            const float acceleration = 1;
+            const float jumpPotential = 10;
+            const float jumpSpeed = 4;
+            const float gravity = 0.7f;
+            const float friction = 0.7f;
 
-            if (keyA) hSpeed -= acceleration * dt;
-            if (keyD) hSpeed += acceleration * dt;
+            if (keyA) hSpeed -= acceleration;
+            if (keyD) hSpeed += acceleration;
 
-            hSpeed *= (float)Math.Exp(-friction * dt);
+            hSpeed *= friction;
             hSpeed = Utility.Clamp(hSpeed, -maxHSpeed, maxHSpeed);
 
-            vSpeed += gravity * dt;
+            vSpeed += gravity;
 
             if (canJump)
             {
@@ -81,17 +76,12 @@ namespace Example.Entities
                 float usedEnergy = Math.Min(jumpSpeed + vSpeed, jumpEnergy);
                 jumpEnergy -= usedEnergy;
                 vSpeed -= usedEnergy;
-
-                if (jumpEnergy <= 0)
-                {
-                    // jump done
-                }
             }
 
             vSpeed = Utility.Clamp(vSpeed, -maxVSpeed, maxVSpeed);
 
-            float hMove = hSpeed * dt;
-            float vMove = vSpeed * dt;
+            float hMove = hSpeed;
+            float vMove = vSpeed;
 
             int hRep = (int)Math.Floor(Math.Abs(hMove));
             int vRep = (int)Math.Floor(Math.Abs(vMove));
@@ -138,24 +128,12 @@ namespace Example.Entities
 
                 Position.Y += Math.Sign(vMove);
             }
-
-            height.RemoveAt(0);
-            height.Add(Position.Y);
         }
 
         public override void Draw(RenderTarget rt)
         {
             sprite.Position = Position;
             rt.Draw(sprite);
-
-            var s = new CircleShape(.5f);
-            s.FillColor = Color.Black;
-
-            for (int i = 0; i < height.Count; i++)
-            {
-                s.Position = new Vector2f(i, (height[i] / (20 * 8)) * 100);
-                rt.Draw(s);
-            }
         }
     }
 }

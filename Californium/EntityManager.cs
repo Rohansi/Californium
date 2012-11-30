@@ -34,7 +34,7 @@ namespace Californium
             return inputEntities.Any(e => e.Input.ProcessInput(args));
         }
 
-        public void Update(float dt)
+        public void Update()
         {
             var readonlyEntities = new List<Entity>(entities);
             var newGridPos = new Vector2i();
@@ -42,7 +42,7 @@ namespace Californium
             foreach (var e in readonlyEntities)
             {
                 currentEntity = e;
-                e.Update(dt);
+                e.Update();
                 currentEntity = null;
 
                 newGridPos.X = (int)e.Position.X / GameOptions.EntityGridSize;
@@ -56,7 +56,7 @@ namespace Californium
                 }
             }
 
-            cleanupTimer += dt;
+            cleanupTimer += GameOptions.Timestep;
 
             if (cleanupTimer >= CleanupEvery)
             {

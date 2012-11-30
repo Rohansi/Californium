@@ -41,14 +41,14 @@ namespace Californium
             return Map.PlaceFree(r) && Entities.PlaceFree(r);
         }
 
-        internal void UpdateInternal(float dt)
+        internal void UpdateInternal()
         {
-            Entities.Update(dt);
-            Update(dt);
-            Camera.Update(dt);
+            Entities.Update();
+            Update();
+            Camera.Update();
         }
 
-        public virtual void Update(float dt)
+        public virtual void Update()
         {
             
         }

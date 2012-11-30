@@ -36,7 +36,7 @@ namespace Californium
             get { return new FloatRect(Position.X - Origin.X, Position.Y - Origin.Y, Size.X, Size.Y); }
         }
 
-        public virtual void Update(float dt) { }
+        public virtual void Update() { }
         public virtual void Draw(RenderTarget rt) { }
     }
 }

@@ -52,45 +52,31 @@ namespace Californium
 
         public static void Run()
         {
-            const int maxUpdates = 5;
-
             var timer = new Stopwatch();
-            var targetDt = 1 / ((float)GameOptions.Framerate / 2);
+            float accumulator = 0;
 
             while (Window.IsOpen())
             {
                 float time = (float)timer.ElapsedMilliseconds / 1000;
                 timer.Restart();
 
-                // Calculate semi fixed timestep with maximum updates per frame
-                List<float> updates = new List<float>();
-                if (time / targetDt > maxUpdates)
-                {
-                    for (int i = 0; i < maxUpdates; i++)
-                        updates.Add(time / maxUpdates);
-                }
-                else
-                {
-                    while (time > 0)
-                    {
-                        updates.Add(time > targetDt ? targetDt : time);
-                        time -= targetDt;
-                    }
-                }
+                accumulator += time;
 
                 // Update
-                foreach (var dt in updates)
+                while (accumulator >= GameOptions.Timestep)
                 {
                     Window.DispatchEvents();
-                    Timer.Update(dt);
+                    Timer.Update();
 
                     for (int i = 0; i < states.Count; i++)
                     {
                         var state = states[i];
 
                         if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.FrameStep.Update))
-                            state.UpdateInternal(dt);
+                            state.UpdateInternal();
                     }
+
+                    accumulator -= GameOptions.Timestep;
                 }
 
                 // Draw
