@@ -8,16 +8,20 @@ namespace Californium
     {
         public int Index;
         public bool Solid;
+        public object UserData;
 
-        public Tile(int index, bool solid)
+        public Tile(int index, bool solid, object userData = null)
         {
             Index = index;
             Solid = solid;
+            UserData = userData;
         }
     }
 
     public class TileMap
     {
+        public delegate bool TileCollisionCondition(Tile tile, FloatRect tileBounds, FloatRect collisionBounds);
+
         private class Chunk : Drawable
         {
             public bool Dirty;
@@ -104,12 +108,9 @@ namespace Californium
 
         private Tile[,] tiles;
         private Chunk[,] chunks;
-        private Texture texture;
 
-        public TileMap(int width, int height, string image)
+        public TileMap(int width, int height, Texture texture)
         {
-            texture = TextureManager.Load(image);
-
             Width = width;
             Height = height;
 
@@ -170,8 +171,7 @@ namespace Californium
             }
         }
 
-        // NOTE: these don't treat outside the map as solid
-        public bool PlaceFree(FloatRect r)
+        public bool PlaceFree(FloatRect r, TileCollisionCondition cond = null)
         {
             int tileSize = GameOptions.TileSize;
 
@@ -185,31 +185,22 @@ namespace Californium
             {
                 for (int xx = minX; xx < maxX; xx++)
                 {
-                    if (tiles[xx, yy].Solid)
-                    {
-                        testRect.Left = xx * tileSize;
-                        testRect.Top = yy * tileSize;
+                    if (!tiles[xx, yy].Solid)
+                        continue;
 
-                        if (r.Intersects(testRect))
-                        {
-                            return false;
-                        }
-                    }
+                    testRect.Left = xx * tileSize;
+                    testRect.Top = yy * tileSize;
+
+                    if (!r.Intersects(testRect))
+                        continue;
+                    if (cond == null)
+                        return false;
+                    if (cond(tiles[xx, yy], testRect, r))
+                        return false;
                 }
             }
 
             return true;
-        }
-
-        public bool PlaceFree(Vector2f p)
-        {
-            int xx = (int)p.X / GameOptions.TileSize;
-            int yy = (int)p.Y / GameOptions.TileSize;
-
-            if (xx < 0 || xx > Width || yy < 0 || yy > Height)
-                return true;
-
-            return !tiles[xx, yy].Solid;
         }
     }
 }
