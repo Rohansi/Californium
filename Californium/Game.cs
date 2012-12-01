@@ -8,7 +8,6 @@ namespace Californium
     public static class Game
     {
         public static RenderWindow Window;
-
         public static View DefaultView
         {
             get

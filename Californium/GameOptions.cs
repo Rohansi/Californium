@@ -9,7 +9,7 @@
 
         public static bool Vsync = false;
         public static uint Framerate = 60;
-        public static float Timestep = 0.016667f;
+        public static float Timestep = 1f / 60;
 
         public static float MusicVolume = 50;
         public static float SoundVolume = 100;

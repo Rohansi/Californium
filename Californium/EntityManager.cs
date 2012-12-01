@@ -125,13 +125,16 @@ namespace Californium
 
         public IEnumerable<Entity> InArea(FloatRect rect)
         {
-            rect = new FloatRect(rect.Left - GameOptions.EntityOverscan, rect.Top - GameOptions.EntityOverscan,
-                                 rect.Width + (GameOptions.EntityOverscan * 2), rect.Height + (GameOptions.EntityOverscan * 2));
+            float overscan = GameOptions.EntityOverscan;
+            int gridSize = GameOptions.EntityGridSize;
 
-            int startX = (int)rect.Left / GameOptions.EntityGridSize;
-            int startY = (int)rect.Top / GameOptions.EntityGridSize;
-            int width = (int)rect.Width / GameOptions.EntityGridSize;
-            int height = (int)rect.Height / GameOptions.EntityGridSize;
+            rect = new FloatRect(rect.Left - overscan, rect.Top - overscan,
+                                 rect.Width + (overscan * 2), rect.Height + (overscan * 2));
+
+            int startX = (int)rect.Left / gridSize;
+            int startY = (int)rect.Top / gridSize;
+            int width = (int)rect.Width / gridSize;
+            int height = (int)rect.Height / gridSize;
 
             var pos = new Vector2i();
 
