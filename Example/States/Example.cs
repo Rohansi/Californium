@@ -22,7 +22,7 @@ namespace Example.States
             Entities.Add(player);
 
             var random = new Random();
-            Map = new TileMap(width, height, TextureManager.Load("Tiles.png"));
+            Map = new TileMap(width, height, Assets.LoadTexture("Tiles.png"));
 
             for (int y = 0; y < height; y++)
             {

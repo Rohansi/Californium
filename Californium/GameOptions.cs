@@ -14,10 +14,10 @@
         public static float MusicVolume = 50;
         public static float SoundVolume = 100;
 
-        public static string TextureLocation = "Data/Texture/";
-        public static string SoundLocation = "Data/Sound/";
-        public static string MusicLocation = "Data/Music/";
-        public static string FontLocation = "Data/Font/";
+        public static string TextureLocation = "Assets/Texture/";
+        public static string SoundLocation = "Assets/Sound/";
+        public static string MusicLocation = "Assets/Music/";
+        public static string FontLocation = "Assets/Font/";
 
         public static int TileSize = 16;
         public static int TileChunkSize = 32;

@@ -30,7 +30,7 @@
 [x] - Animations
 [ ] - Platformer example
    [ ] - Remove hSave and vSave
-   [ ] - Figure out how to do jumpthrough tiles
-[ ] - Combine resource managers
+   [x] - Figure out how to do jumpthrough tiles
+[x] - Combine resource managers
 [ ] - Documentation
 [ ] - Particle engine

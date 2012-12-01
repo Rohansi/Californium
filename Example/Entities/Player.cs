@@ -26,7 +26,7 @@ namespace Example.Entities
             Origin = new Vector2f(SpriteSize / 2, SpriteSize / 2);
             Size = new Vector2f(SpriteSize, SpriteSize);
 
-            sprite = new Sprite(TextureManager.Load("Player.png")) { Origin = Origin };
+            sprite = new Sprite(Assets.LoadTexture("Player.png")) { Origin = Origin };
 
             Input.Key[Keyboard.Key.W] = args =>
             {
