@@ -34,8 +34,9 @@ namespace Example.States
                     }
                     else if (x > 20 || y > 20)
                     {
+                        int tile = random.Next(3);
                         if (random.NextDouble() > 0.9)
-                            Map[x, y] = new Tile(1 + random.Next(3), true);
+                            Map[x, y] = new Tile(1 + tile, true, tile == 0 ? (object)1 : null);
                     }
                 }
             }

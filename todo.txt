@@ -29,7 +29,6 @@
    [x] - Fixed timestep is better
 [x] - Animations
 [ ] - Platformer example
-   [ ] - Remove hSave and vSave
    [x] - Figure out how to do jumpthrough tiles
 [x] - Combine resource managers
 [ ] - Documentation

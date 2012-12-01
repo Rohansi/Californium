@@ -18,6 +18,7 @@ namespace Example.Entities
         private float hSpeed, vSpeed;
         private bool canJump;
         private float jumpEnergy;
+        private bool fallThrough;
 
         public Player(Vector2f position)
         {
@@ -61,12 +62,15 @@ namespace Example.Entities
 
             vSpeed += gravity;
 
+            fallThrough = false;
+            var bounds = BoundingBox;
+            bounds.Top++;
+            bool onGround = !PlaceFree(bounds);
+            fallThrough = keyS && onGround;
+
             if (canJump)
             {
-                var bounds = BoundingBox;
-                bounds.Top++;
-
-                if (!Parent.PlaceFree(bounds))
+                if (onGround)
                     jumpEnergy = jumpPotential;
                 canJump = false;
             }
@@ -105,7 +109,7 @@ namespace Example.Entities
             while (hRep-- > 0)
             {
                 testRect.Left += Math.Sign(hMove);
-                if (!Parent.PlaceFree(testRect))
+                if (!PlaceFree(testRect))
                 {
                     hSave = 0;
                     hSpeed = 0;
@@ -119,7 +123,7 @@ namespace Example.Entities
             while (vRep-- > 0)
             {
                 testRect.Top += Math.Sign(vMove);
-                if (!Parent.PlaceFree(testRect))
+                if (!PlaceFree(testRect))
                 {
                     vSave = 0;
                     vSpeed = 0;
@@ -134,6 +138,22 @@ namespace Example.Entities
         {
             sprite.Position = Position;
             rt.Draw(sprite);
+        }
+
+        private bool PlaceFree(FloatRect r)
+        {
+            TileMap.TileCollisionCondition cond = (tile, bounds, collisionBounds) =>
+            {
+                if (tile.UserData == null)
+                    return true;
+                if (fallThrough)
+                    return false;
+                if (vSpeed > 0 && collisionBounds.Top + collisionBounds.Height - 1 <= bounds.Top)
+                    return true;
+                return false;
+            };
+
+            return Parent.Map.PlaceFree(r, cond);
         }
     }
 }
