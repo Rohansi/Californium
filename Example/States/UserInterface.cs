@@ -6,7 +6,7 @@ namespace Example.States
     {
         public UserInterface()
         {
-            Entities.Add(new Entities.Panel());
+            Entities.Add(new Entities.ScorePanel());
         }
     }
 }

@@ -4,6 +4,8 @@ namespace Example
 {
     class Program
     {
+        public static int Score = 0;
+
         static void Main()
         {
             GameOptions.TileSize = 8;

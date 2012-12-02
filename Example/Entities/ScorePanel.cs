@@ -4,15 +4,20 @@ using SFML.Window;
 
 namespace Example.Entities
 {
-    class Panel : Entity
+    class ScorePanel : Entity
     {
         private bool dragging;
         private Vector2f dragOffset;
+        private Text text;
 
-        public Panel()
+        public ScorePanel()
         {
             Size = new Vector2f(100, 100);
             Position = new Vector2f(10, 10);
+
+            text = new Text("", Assets.LoadFont("OpenSans-Regular.ttf"));
+            text.CharacterSize = 18;
+            text.Color = Color.Black;
 
             Input.MouseButton[Mouse.Button.Left] = args =>
             {
@@ -53,12 +58,16 @@ namespace Example.Entities
             if (Position.Y < bounds.Top) Position.Y = bounds.Top;
             if (Position.X > bounds.Left + bounds.Width - 100) Position.X = bounds.Left + bounds.Width - 100;
             if (Position.Y > bounds.Top + bounds.Height - 100) Position.Y = bounds.Top + bounds.Height - 100;
+
+            text.DisplayedString = "Score: " + Program.Score;
+            text.Position = Position;
         }
 
         public override void Draw(RenderTarget rt)
         {
             var shape = new RectangleShape(Size) { FillColor = new Color(255, 255, 255, 128), Position = Position };
             rt.Draw(shape);
+            rt.Draw(text);
         }
     }
 }

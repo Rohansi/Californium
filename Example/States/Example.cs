@@ -35,10 +35,15 @@ namespace Example.States
                     else if (x > 20 || y > 20)
                     {
                         int tile = random.Next(3);
-                        if (random.NextDouble() > 0.9)
+                        if (random.NextDouble() > 0.8)
                             Map[x, y] = new Tile(1 + tile, true, tile == 0 ? (object)1 : null);
                     }
                 }
+            }
+
+            for (int i = 0; i < 1000; i++)
+            {
+                Entities.Add(new Coin(random.Next(width * GameOptions.TileSize), random.Next(height * GameOptions.TileSize)));
             }
 
             Input.MouseButton[Mouse.Button.Left] = args =>

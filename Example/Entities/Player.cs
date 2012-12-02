@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Californium;
 using SFML.Graphics;
 using SFML.Window;
@@ -45,6 +46,25 @@ namespace Example.Entities
         }
 
         public override void Update()
+        {
+            Movement();
+
+            var coins = Parent.Entities.InArea(BoundingBox).OfType<Coin>();
+            foreach (var c in coins.Where(c => c.BoundingBox.Intersects(BoundingBox)))
+            {
+                Parent.Entities.Remove(c);
+                Program.Score++;
+                Assets.PlaySound("PickupCoin.wav");
+            }
+        }
+
+        public override void Draw(RenderTarget rt)
+        {
+            sprite.Position = Position;
+            rt.Draw(sprite);
+        }
+
+        private void Movement()
         {
             const float maxHSpeed = 2.5f;
             const float maxVSpeed = 6;
@@ -132,12 +152,6 @@ namespace Example.Entities
 
                 Position.Y += Math.Sign(vMove);
             }
-        }
-
-        public override void Draw(RenderTarget rt)
-        {
-            sprite.Position = Position;
-            rt.Draw(sprite);
         }
 
         private bool PlaceFree(FloatRect r)

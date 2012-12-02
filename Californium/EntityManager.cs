@@ -133,8 +133,8 @@ namespace Californium
 
             int startX = (int)rect.Left / gridSize;
             int startY = (int)rect.Top / gridSize;
-            int width = (int)rect.Width / gridSize;
-            int height = (int)rect.Height / gridSize;
+            int width = (int)rect.Width / gridSize + 1;
+            int height = (int)rect.Height / gridSize + 1;
 
             var pos = new Vector2i();
 
@@ -148,7 +148,7 @@ namespace Californium
                     List<Entity> list;
                     if (entityGrid.TryGetValue(pos, out list))
                     {
-                        foreach (Entity e in list)
+                        foreach (Entity e in new List<Entity>(list))
                         {
                             yield return e;
                         }

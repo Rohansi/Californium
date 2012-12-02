@@ -2,7 +2,7 @@
 
 namespace Californium
 {
-    class AnimatedSprite : Drawable
+    public class AnimatedSprite : Transformable, Drawable
     {
         Sprite sprite;
         int frameWidth;
@@ -37,9 +37,9 @@ namespace Californium
             CurrentFrame = 0;
         }
 
-        public void Update(float dt)
+        public void Update()
         {
-            elapsedTime += dt;
+            elapsedTime += GameOptions.Timestep;
 
             while (elapsedTime >= FrameTime)
             {
@@ -52,7 +52,8 @@ namespace Californium
 
         public void Draw(RenderTarget target, RenderStates states)
         {
-            target.Draw(sprite);
+            states.Transform *= Transform;
+            target.Draw(sprite, states);
         }
     }
 }

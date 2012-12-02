@@ -30,7 +30,7 @@ namespace Californium
             if (fonts.TryGetValue(name, out t))
                 return t;
 
-            t = new Font(GameOptions.TextureLocation + name);
+            t = new Font(GameOptions.FontLocation + name);
             fonts.Add(name, t);
 
             return t;

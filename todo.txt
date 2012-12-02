@@ -28,8 +28,10 @@
 [x] - Semi fixed timestep
    [x] - Fixed timestep is better
 [x] - Animations
-[ ] - Platformer example
+[x] - Platformer example
    [x] - Figure out how to do jumpthrough tiles
+   [x] - Collect coins or something
+   [x] - Track score, display on different state
 [x] - Combine resource managers
 [ ] - Documentation
 [ ] - Particle engine
