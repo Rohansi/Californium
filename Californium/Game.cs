@@ -56,7 +56,7 @@ namespace Californium
 
             while (Window.IsOpen())
             {
-                float time = (float)timer.ElapsedMilliseconds / 1000;
+                float time = (float)timer.Elapsed.TotalSeconds;
                 timer.Restart();
 
                 accumulator += time;
