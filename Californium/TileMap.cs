@@ -20,7 +20,7 @@ namespace Californium
 
     public class TileMap
     {
-        public delegate bool TileCollisionCondition(Tile tile, FloatRect tileBounds, FloatRect collisionBounds);
+        public delegate bool CollisionCondition(Tile tile, FloatRect tileBounds, FloatRect collisionBounds);
 
         private class Chunk : Drawable
         {
@@ -171,7 +171,7 @@ namespace Californium
             }
         }
 
-        public bool PlaceFree(FloatRect r, TileCollisionCondition cond = null)
+        public bool PlaceFree(FloatRect r, CollisionCondition cond = null)
         {
             int tileSize = GameOptions.TileSize;
 

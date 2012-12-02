@@ -142,7 +142,7 @@ namespace Example.Entities
 
         private bool PlaceFree(FloatRect r)
         {
-            TileMap.TileCollisionCondition cond = (tile, bounds, collisionBounds) =>
+            TileMap.CollisionCondition cond = (tile, bounds, collisionBounds) =>
             {
                 if (tile.UserData == null)
                     return true;

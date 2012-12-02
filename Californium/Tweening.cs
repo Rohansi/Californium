@@ -2,7 +2,7 @@
 
 namespace Californium
 {
-    public delegate double TweenFunc(double t, bool absolute = false);
+    public delegate double TweenFunc(double? overrideTimer);
     public delegate void TweenCallback();
 
     public enum TweenType
@@ -22,9 +22,9 @@ namespace Californium
             double time = 0;
             bool called = false;
 
-            return (deltaTime, absolute) =>
+            return (overrideTimer) =>
             {
-                double t = absolute ? deltaTime : (time = Math.Min(time + deltaTime, duration));
+                double t = overrideTimer != null ? overrideTimer.Value : (time = Math.Min(time + GameOptions.Timestep, duration));
 
                 if (t >= duration && !called && finished != null)
                 {
@@ -41,9 +41,9 @@ namespace Californium
             double time = 0;
             bool called = false;
 
-            return (deltaTime, absolute) =>
+            return (overrideTimer) =>
             {
-                double t = absolute ? deltaTime : (time = Math.Min(time + deltaTime, duration));
+                double t = overrideTimer != null ? overrideTimer.Value : (time = Math.Min(time + GameOptions.Timestep, duration));
 
                 if (t >= duration && !called && finished != null)
                 {
@@ -208,7 +208,7 @@ namespace Californium
                 case TweenType.InBounce:
                     {
                         TweenFunc outBounce = Create(TweenType.OutBounce, 0, c, d);
-                        return c - outBounce(d - t, true) + b;
+                        return c - outBounce(d - t) + b;
                     }
 
                 case TweenType.OutBounce:
@@ -226,8 +226,8 @@ namespace Californium
                         TweenFunc outBounce = Create(TweenType.OutBounce, 0, c, d);
 
                         if (t < d / 2)
-                            return inBounce(t * 2, true) * .5 + b;
-                        return outBounce(t * 2 - d, true) * .5 + c * .5 + b;
+                            return inBounce(t * 2) * .5 + b;
+                        return outBounce(t * 2 - d) * .5 + c * .5 + b;
                     }
 
                 case TweenType.InBack:
