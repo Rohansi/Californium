@@ -1,10 +1,12 @@
-﻿using SFML.Graphics;
+﻿using System.Collections.Generic;
+using SFML.Graphics;
 using SFML.Window;
 
 namespace Californium
 {
     public abstract class Entity
     {
+        internal LinkedListNode<Entity> Node;
         internal Vector2i GridCoordinate;
 
         public State Parent;

@@ -10,10 +10,10 @@ namespace Californium
     {
         private const float CleanupEvery = 60.0f;
 
-        private List<Entity> entities;
+        private LinkedList<Entity> entities;
         private List<Entity> inputEntities;
 
-        private Dictionary<Vector2i, List<Entity>> entityGrid;
+        private Dictionary<Vector2i, LinkedList<Entity>> entityGrid;
         private float cleanupTimer;
 
         private State parent;
@@ -22,9 +22,9 @@ namespace Californium
 
         public EntityManager(State parent)
         {
-            entities = new List<Entity>();
+            entities = new LinkedList<Entity>();
             inputEntities = new List<Entity>();
-            entityGrid = new Dictionary<Vector2i, List<Entity>>();
+            entityGrid = new Dictionary<Vector2i, LinkedList<Entity>>();
 
             this.parent = parent;
         }
@@ -36,11 +36,14 @@ namespace Californium
 
         public void Update()
         {
-            var readonlyEntities = new List<Entity>(entities);
             var newGridPos = new Vector2i();
 
-            foreach (var e in readonlyEntities)
+            var cur = entities.First;
+            while (cur != null)
             {
+                var next = cur.Next;
+                var e = cur.Value;
+
                 currentEntity = e;
                 e.Update();
                 currentEntity = null;
@@ -48,12 +51,14 @@ namespace Californium
                 newGridPos.X = (int)e.Position.X / GameOptions.EntityGridSize;
                 newGridPos.Y = (int)e.Position.Y / GameOptions.EntityGridSize;
 
-                if (e.GridCoordinate.Equals(newGridPos))
-                    continue;
+                if (!e.GridCoordinate.Equals(newGridPos))
+                {
+                    GridRemove(e);
+                    e.GridCoordinate = newGridPos;
+                    GridAdd(e);
+                }
 
-                GridRemove(e);
-                e.GridCoordinate = newGridPos;
-                GridAdd(e);
+                cur = next;
             }
 
             cleanupTimer += GameOptions.Timestep;
@@ -84,9 +89,8 @@ namespace Californium
 
         public void Add(Entity e)
         {
-            entities.Add(e);
-
             e.Parent = parent;
+            e.Node = entities.AddLast(e);
             e.GridCoordinate = new Vector2i((int)e.Position.X / GameOptions.EntityGridSize, (int)e.Position.Y / GameOptions.EntityGridSize);
 
             GridAdd(e);
@@ -98,28 +102,10 @@ namespace Californium
         public void Remove(Entity e)
         {
             GridRemove(e);
-            entities.Remove(e);
+            entities.Remove(e.Node);
 
             if (e.Input != null)
                 inputEntities.Remove(e);
-        }
-
-        public void RemoveAll(Func<Entity, bool> match)
-        {
-            foreach (var e in entities.Where(match).ToList())
-            {
-                Remove(e);
-            }
-        }
-
-        public Entity Find(Predicate<Entity> match)
-        {
-            return entities.Find(match);
-        }
-
-        public List<Entity> FindAll(Predicate<Entity> match)
-        {
-            return entities.FindAll(match);
         }
 
         public IEnumerable<Entity> InArea(FloatRect rect)
@@ -144,12 +130,15 @@ namespace Californium
                     pos.X = x;
                     pos.Y = y;
 
-                    List<Entity> list;
+                    LinkedList<Entity> list;
                     if (entityGrid.TryGetValue(pos, out list))
                     {
-                        foreach (Entity e in new List<Entity>(list))
+                        var cur = list.First;
+                        while (cur != null)
                         {
-                            yield return e;
+                            var next = cur.Next;
+                            yield return cur.Value;
+                            cur = next;
                         }
                     }
                 }
@@ -168,21 +157,22 @@ namespace Californium
 
         private void GridAdd(Entity e)
         {
-            List<Entity> list;
+            LinkedList<Entity> list;
 
             if (!entityGrid.TryGetValue(e.GridCoordinate, out list))
             {
-                list = new List<Entity> { e };
+                list = new LinkedList<Entity>();
+                list.AddLast(e);
                 entityGrid.Add(e.GridCoordinate, list);
                 return;
             }
 
-            list.Add(e);
+            list.AddLast(e);
         }
 
         private void GridRemove(Entity e)
         {
-            List<Entity> list;
+            LinkedList<Entity> list;
 
             if (entityGrid.TryGetValue(e.GridCoordinate, out list))
                 list.Remove(e);
