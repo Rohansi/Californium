@@ -15,10 +15,10 @@ namespace Example.Entities
             Size = new Vector2f(100, 100);
             Position = new Vector2f(10, 10);
 
-            text = new Text("", Assets.LoadFont("OpenSans-Regular.ttf"));
-            text.CharacterSize = 18;
-            text.Color = Color.Black;
-
+            text = new Text("", Assets.LoadFont("OpenSans-Regular.ttf"))
+                   { CharacterSize = 18, Color = Color.Black };
+            
+            // Begin/end drag on press/release
             Input.MouseButton[Mouse.Button.Left] = args =>
             {
                 var pos = args.Position;
@@ -38,6 +38,7 @@ namespace Example.Entities
                 return true;
             };
 
+            // Update position if still dragging
             Input.MouseMove = args =>
             {
                 var pos = args.Position;
@@ -54,18 +55,22 @@ namespace Example.Entities
         {
             var bounds = Parent.Camera.Bounds;
 
+            // Clamp the panel to the display
             if (Position.X < bounds.Left) Position.X = bounds.Left;
             if (Position.Y < bounds.Top) Position.Y = bounds.Top;
             if (Position.X > bounds.Left + bounds.Width - 100) Position.X = bounds.Left + bounds.Width - 100;
             if (Position.Y > bounds.Top + bounds.Height - 100) Position.Y = bounds.Top + bounds.Height - 100;
 
+            // Update the displayed text
             text.DisplayedString = "Score: " + Program.Score;
             text.Position = Position;
         }
 
         public override void Draw(RenderTarget rt)
         {
-            var shape = new RectangleShape(Size) { FillColor = new Color(255, 255, 255, 128), Position = Position };
+            var shape = new RectangleShape(Size)
+                        { FillColor = new Color(255, 255, 255, 128), Position = Position };
+
             rt.Draw(shape);
             rt.Draw(text);
         }

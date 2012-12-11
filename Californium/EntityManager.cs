@@ -48,12 +48,12 @@ namespace Californium
                 newGridPos.X = (int)e.Position.X / GameOptions.EntityGridSize;
                 newGridPos.Y = (int)e.Position.Y / GameOptions.EntityGridSize;
 
-                if (!e.GridCoordinate.Equals(newGridPos))
-                {
-                    GridRemove(e);
-                    e.GridCoordinate = newGridPos;
-                    GridAdd(e);
-                }
+                if (e.GridCoordinate.Equals(newGridPos))
+                    continue;
+
+                GridRemove(e);
+                e.GridCoordinate = newGridPos;
+                GridAdd(e);
             }
 
             cleanupTimer += GameOptions.Timestep;
@@ -67,9 +67,8 @@ namespace Californium
 
         public void Draw(RenderTarget target, RenderStates states)
         {
-            View view = target.GetView();
-
-            FloatRect screenBounds = new FloatRect
+            var view = target.GetView();
+            var screenBounds = new FloatRect
             {
                 Left = view.Center.X - (view.Size.X / 2),
                 Top = view.Center.Y - (view.Size.Y / 2),
@@ -125,22 +124,22 @@ namespace Californium
 
         public IEnumerable<Entity> InArea(FloatRect rect)
         {
-            float overscan = GameOptions.EntityOverscan;
-            int gridSize = GameOptions.EntityGridSize;
+            var overscan = GameOptions.EntityOverscan;
+            var gridSize = GameOptions.EntityGridSize;
 
             rect = new FloatRect(rect.Left - overscan, rect.Top - overscan,
                                  rect.Width + (overscan * 2), rect.Height + (overscan * 2));
 
-            int startX = (int)rect.Left / gridSize;
-            int startY = (int)rect.Top / gridSize;
-            int width = (int)rect.Width / gridSize + 1;
-            int height = (int)rect.Height / gridSize + 1;
+            var startX = (int)rect.Left / gridSize;
+            var startY = (int)rect.Top / gridSize;
+            var width = (int)rect.Width / gridSize + 1;
+            var height = (int)rect.Height / gridSize + 1;
 
             var pos = new Vector2i();
 
-            for (int y = startY; y < startY + height; y++)
+            for (var y = startY; y < startY + height; y++)
             {
-                for (int x = startX; x < startX + width; x++)
+                for (var x = startX; x < startX + width; x++)
                 {
                     pos.X = x;
                     pos.Y = y;

@@ -29,7 +29,7 @@ namespace Californium
 
         public static float Direction(Vector2f p1, Vector2f p2)
         {
-            float r = (float)Math.Atan2(p1.Y - p2.Y, p2.X - p1.X);
+            var r = (float)Math.Atan2(p1.Y - p2.Y, p2.X - p1.X);
             return r < 0 ? r + (2 * (float)Math.PI) : r;
         }
 

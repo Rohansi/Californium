@@ -1,4 +1,3 @@
 Californium
 ===========
-
-2D game engine using C# and SFML
+Californium is a 2D game engine utilizing C# and SFML.NET.

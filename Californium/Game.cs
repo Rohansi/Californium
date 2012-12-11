@@ -56,7 +56,7 @@ namespace Californium
 
             while (Window.IsOpen())
             {
-                float time = (float)timer.Elapsed.TotalSeconds;
+                var time = (float)timer.Elapsed.TotalSeconds;
                 timer.Restart();
 
                 accumulator += time;
@@ -67,7 +67,7 @@ namespace Californium
                     Window.DispatchEvents();
                     Timer.Update();
 
-                    for (int i = 0; i < states.Count; i++)
+                    for (var i = 0; i < states.Count; i++)
                     {
                         var state = states[i];
 
@@ -79,7 +79,7 @@ namespace Californium
                 }
 
                 // Draw
-                for (int i = 0; i < states.Count; i++)
+                for (var i = 0; i < states.Count; i++)
                 {
                     var state = states[i];
 
@@ -114,7 +114,7 @@ namespace Californium
 
         private static void DispatchEvent(InputArgs args)
         {
-            for (int i = states.Count - 1; i >= 0; i--)
+            for (var i = states.Count - 1; i >= 0; i--)
             {
                 var state = states[i];
 

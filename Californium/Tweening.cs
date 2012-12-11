@@ -19,12 +19,12 @@ namespace Californium
 
         public static TweenFunc Create(TweenType tweenType, double startValue, double endValue, double duration, TweenCallback finished = null)
         {
-            double time = 0;
-            bool called = false;
+            var time = 0.0;
+            var called = false;
 
-            return (overrideTimer) =>
+            return overrideTimer =>
             {
-                double t = overrideTimer != null ? overrideTimer.Value : (time = Math.Min(time + GameOptions.Timestep, duration));
+                var t = overrideTimer != null ? overrideTimer.Value : (time = Math.Min(time + GameOptions.Timestep, duration));
 
                 if (t >= duration && !called && finished != null)
                 {
@@ -38,12 +38,12 @@ namespace Californium
 
         public static TweenFunc None(double value, double duration = 0, TweenCallback finished = null)
         {
-            double time = 0;
-            bool called = false;
+            var time = 0.0;
+            var called = false;
 
-            return (overrideTimer) =>
+            return overrideTimer =>
             {
-                double t = overrideTimer != null ? overrideTimer.Value : (time = Math.Min(time + GameOptions.Timestep, duration));
+                var t = overrideTimer != null ? overrideTimer.Value : (time = Math.Min(time + GameOptions.Timestep, duration));
 
                 if (t >= duration && !called && finished != null)
                 {
@@ -57,10 +57,12 @@ namespace Californium
 
         private static double TweenMain(TweenType tweenType, double t, double d, double b = 0, double c = 1)
         {
-            double backS = BackAmount;
+            var backS = BackAmount;
 
             switch (tweenType)
             {
+                // TODO: linear
+
                 case TweenType.InQuad:
                     return c * (t /= d) * t + b;
 
@@ -143,8 +145,8 @@ namespace Californium
                 case TweenType.InElastic:
                     {
                         double s;
-                        double p = d * 0.3;
-                        double a = c;
+                        var p = d * 0.3;
+                        var a = c;
 
                         if (t <= 0)
                             return b;
@@ -164,8 +166,8 @@ namespace Californium
                 case TweenType.OutElastic:
                     {
                         double s;
-                        double p = d * .3;
-                        double a = c;
+                        var p = d * .3;
+                        var a = c;
 
                         if (t <= 0)
                             return b;
@@ -185,8 +187,8 @@ namespace Californium
                 case TweenType.InOutElastic:
                     {
                         double s;
-                        double p = d * (.3 * 1.5);
-                        double a = c;
+                        var p = d * (.3 * 1.5);
+                        var a = c;
 
                         if (t <= 0)
                             return b;
@@ -207,7 +209,7 @@ namespace Californium
 
                 case TweenType.InBounce:
                     {
-                        TweenFunc outBounce = Create(TweenType.OutBounce, 0, c, d);
+                        var outBounce = Create(TweenType.OutBounce, 0, c, d);
                         return c - outBounce(d - t) + b;
                     }
 
@@ -222,8 +224,8 @@ namespace Californium
 
                 case TweenType.InOutBounce:
                     {
-                        TweenFunc inBounce = Create(TweenType.InBounce, 0, c, d);
-                        TweenFunc outBounce = Create(TweenType.OutBounce, 0, c, d);
+                        var inBounce = Create(TweenType.InBounce, 0, c, d);
+                        var outBounce = Create(TweenType.OutBounce, 0, c, d);
 
                         if (t < d / 2)
                             return inBounce(t * 2) * .5 + b;

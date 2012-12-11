@@ -38,19 +38,20 @@ namespace Californium
 
         public static void Update()
         {
-            List<TimerInfo> timersCopy = new List<TimerInfo>(timers);
-            List<TimerInfo> toRemove = new List<TimerInfo>();
+            var readonlyTimers = new List<TimerInfo>(timers);
+            var toRemove = new List<TimerInfo>();
 
-            foreach (var timer in timersCopy)
+            foreach (var timer in readonlyTimers)
             {
                 timer.Time -= GameOptions.Timestep;
-                if (timer.Time <= 0)
-                {
-                    if (timer.Event())
-                        toRemove.Add(timer);
-                    else
-                        timer.Time = timer.StartTime;
-                }
+
+                if (!(timer.Time <= 0))
+                    continue;
+
+                if (timer.Event())
+                    toRemove.Add(timer);
+                else
+                    timer.Time = timer.StartTime;
             }
 
             timers.RemoveAll(toRemove.Contains);
