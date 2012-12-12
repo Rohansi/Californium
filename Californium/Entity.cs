@@ -32,10 +32,11 @@ namespace Californium
         public Vector2f Position = new Vector2f();
         public Vector2f Origin = new Vector2f();
         public Vector2f Size = new Vector2f();
+        public Vector2f Scale = new Vector2f(1, 1);
 
         public virtual FloatRect BoundingBox
         {
-            get { return new FloatRect(Position.X - Origin.X, Position.Y - Origin.Y, Size.X, Size.Y); }
+            get { return new FloatRect(Position.X - (Origin.X * Scale.X), Position.Y - (Origin.Y * Scale.Y), Size.X * Scale.X, Size.Y * Scale.Y); }
         }
 
         public virtual void Update() { }
