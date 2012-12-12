@@ -6,7 +6,7 @@ namespace Californium
     public abstract class State
     {
         [Flags]
-        public enum FrameStep
+        public enum UpdateMode
         {
             None = 0,
             Input = 1,
@@ -20,7 +20,7 @@ namespace Californium
         public EntityManager Entities;
         public TileMap Map;
 
-        public FrameStep InactiveMode { get; protected set; }
+        public UpdateMode InactiveMode { get; protected set; }
         public Color ClearColor { get; protected set; }
 
         private Input input;
@@ -33,7 +33,7 @@ namespace Californium
         {
             InitializeCamera();
             Entities = new EntityManager(this);
-            InactiveMode = FrameStep.All;
+            InactiveMode = UpdateMode.All;
         }
 
         public bool PlaceFree(FloatRect r)

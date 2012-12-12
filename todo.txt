@@ -1,6 +1,6 @@
 [ ] - Documentation
-[ ] - Entity scale
-[ ] - Linear tweening
+[x] - Entity scale
+[x] - Linear tweening
 [ ] - Smooth camera
 [ ] - Improve EntityManager
    [x] - Figure out how to remove the List<Entity>

@@ -71,7 +71,7 @@ namespace Californium
                     {
                         var state = states[i];
 
-                        if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.FrameStep.Update))
+                        if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.UpdateMode.Update))
                             state.UpdateInternal();
                     }
 
@@ -83,7 +83,7 @@ namespace Californium
                 {
                     var state = states[i];
 
-                    if (i != states.Count - 1 && !state.InactiveMode.HasFlag(State.FrameStep.Draw))
+                    if (i != states.Count - 1 && !state.InactiveMode.HasFlag(State.UpdateMode.Draw))
                         continue;
 
                     if (i == 0)

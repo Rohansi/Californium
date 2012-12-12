@@ -10,7 +10,7 @@ namespace Californium
         InQuad, OutQuad, InOutQuad, InCubic, OutCubic, InOutCubic, InQuart, OutQuart, InOutQuart,
         InQuint, OutQuint, InOutQuint, InSine, OutSine, InOutSine, InExpo, OutExpo, InOutExpo,
         InCirc, OutCirc, InOutCirc, InElastic, OutElastic, InOutElastic, InBack, OutBack,
-        InOutBack, InBounce, OutBounce, InOutBounce
+        InOutBack, InBounce, OutBounce, InOutBounce, Linear
     }
 
     public static class Tween
@@ -61,7 +61,8 @@ namespace Californium
 
             switch (tweenType)
             {
-                // TODO: linear
+                case TweenType.Linear:
+                    return c * t / d + b;
 
                 case TweenType.InQuad:
                     return c * (t /= d) * t + b;
