@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using SFML.Graphics;
 using SFML.Audio;
 
@@ -15,7 +16,7 @@ namespace Californium
             if (Textures.TryGetValue(name, out t))
                 return t;
 
-            t = new Texture(GameOptions.TextureLocation + name);
+            t = new Texture(Path.Combine(GameOptions.TextureLocation, name));
             Textures.Add(name, t);
 
             return t;
@@ -29,25 +30,30 @@ namespace Californium
             if (Fonts.TryGetValue(name, out t))
                 return t;
 
-            t = new Font(GameOptions.FontLocation + name);
+            t = new Font(Path.Combine(GameOptions.FontLocation, name));
             Fonts.Add(name, t);
 
             return t;
         }
 
         private static readonly Dictionary<string, SoundBuffer> Buffers = new Dictionary<string, SoundBuffer>();
-        private static readonly List<Sound> Sounds = new List<Sound>();
-        public static void PlaySound(string name)
+        public static SoundBuffer LoadSound(string name)
         {
             SoundBuffer sb;
 
             if (!Buffers.TryGetValue(name, out sb))
             {
-                sb = new SoundBuffer(GameOptions.SoundLocation + name);
+                sb = new SoundBuffer(Path.Combine(GameOptions.SoundLocation, name));
                 Buffers.Add(name, sb);
             }
 
-            var s = new Sound(sb)
+            return sb;
+        }
+
+        private static readonly List<Sound> Sounds = new List<Sound>();
+        public static void PlaySound(string name)
+        {
+            var s = new Sound(LoadSound(name))
                     { Volume = GameOptions.SoundVolume };
             
             s.Play();
@@ -61,7 +67,7 @@ namespace Californium
         {
             var state = 0;
             var tween = Tween.Create(TweenType.OutQuad, 0, GameOptions.MusicVolume, 0.5f, () => state = 1);
-            var music = new Music(GameOptions.MusicLocation + name);
+            var music = new Music(Path.Combine(GameOptions.MusicLocation, name));
             var watch = new Stopwatch();
 
             currentMusic = music;

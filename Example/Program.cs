@@ -1,4 +1,5 @@
-﻿using Californium;
+﻿using System.Collections.Generic;
+using Californium;
 
 namespace Example
 {
@@ -18,6 +19,10 @@ namespace Example
 
             // Done setting options, initialize
             Game.Initialize();
+
+            /*var loader = new AssetPreloader(new List<string> {"Player.png", "Tiles.png", "Coin.png"},
+                                            new List<string> {"PickupCoin.wav"},
+                                            new List<string> {"OpenSans-Regular.ttf"});*/
 
             // Base state is the actual game
             Game.SetState(new States.Example());
