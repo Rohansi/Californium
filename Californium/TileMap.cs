@@ -6,11 +6,11 @@ namespace Californium
 {
     public struct Tile
     {
-        public int Index;
+        public ushort Index;
         public bool Solid;
         public object UserData;
 
-        public Tile(int index, bool solid, object userData = null)
+        public Tile(ushort index, bool solid, object userData = null)
         {
             Index = index;
             Solid = solid;
@@ -30,7 +30,7 @@ namespace Californium
             private int chunkX, chunkY;
             private Tile[,] tiles;
             private Texture texture;
-            private int lastTile;
+            private ushort lastTile;
 
             public Chunk(int chunkX, int chunkY, Tile[,] tiles, Texture texture)
             {
@@ -39,7 +39,7 @@ namespace Californium
                 this.chunkY = chunkY;
                 this.texture = texture;
 
-                lastTile = (int)((texture.Size.X / GameOptions.TileSize) * (texture.Size.Y / GameOptions.TileSize) - 1);
+                lastTile = texture == null ? ushort.MaxValue : (ushort)((texture.Size.X / GameOptions.TileSize) * (texture.Size.Y / GameOptions.TileSize) - 1);
 
                 Dirty = true;
             }
@@ -114,7 +114,8 @@ namespace Californium
             Width = width;
             Height = height;
 
-            var lastTile = (int)((texture.Size.X / GameOptions.TileSize) * (texture.Size.Y / GameOptions.TileSize) - 1);
+            var lastTile = texture == null ? ushort.MaxValue : (ushort)((texture.Size.X / GameOptions.TileSize) * (texture.Size.Y / GameOptions.TileSize) - 1);
+
             tiles = new Tile[width, height];
 
             for (var y = 0; y < height; y++)

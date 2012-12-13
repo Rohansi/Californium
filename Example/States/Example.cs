@@ -39,12 +39,12 @@ namespace Example.States
                     else if (x > 20 || y > 20)
                     {
                         // Leave an empty start region so the player doesn't get stuck
-                        var tile = random.Next(3);
+                        var tile = (ushort)(1 + random.Next(3));
 
                         // 20% chance of a tile being non-air, if the tile is red (zero), we give it
                         // a non-null userdata which will make it jumpthrough in this example
                         if (random.NextDouble() > 0.8)
-                            Map[x, y] = new Tile(1 + tile, true, tile == 0 ? (object)1 : null);
+                            Map[x, y] = new Tile(tile, true, tile == 1 ? (object)1 : null);
                     }
                 }
             }
