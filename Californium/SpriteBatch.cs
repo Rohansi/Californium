@@ -57,7 +57,8 @@ namespace Californium
         {
             if (!drawing) throw new Exception("Begin() must be called first");
 
-            Array.Resize(ref vertices, sprites.Count * 4);
+            if (sprites.Count * 4 > vertices.Length)
+                Array.Resize(ref vertices, sprites.Count * 4);
 
             if (depthSort)
                 sprites.Sort((i, j) => i.Item1 - i.Item1);
