@@ -50,7 +50,7 @@ namespace Example.States
             }
 
             // Create a bunch of ramdom coins around the map
-            for (var i = 0; i < 250; i++)
+            for (var i = 0; i < 500; i++)
             {
                 Entities.Add(new Coin(random.Next(width * GameOptions.TileSize), random.Next(height * GameOptions.TileSize)));
             }

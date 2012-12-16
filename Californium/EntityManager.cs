@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SFML.Graphics;
 using SFML.Window;
 
 namespace Californium
 {
-    public class EntityManager : Drawable
+    public class EntityManager
     {
         private const float CleanupEvery = 60.0f;
 
@@ -70,9 +69,9 @@ namespace Californium
             }
         }
 
-        public void Draw(RenderTarget target, RenderStates states)
+        public void Draw(RenderTarget rt, SpriteBatch spriteBatch)
         {
-            var view = target.GetView();
+            var view = rt.GetView();
             var screenBounds = new FloatRect
             {
                 Left = view.Center.X - (view.Size.X / 2),
@@ -83,7 +82,7 @@ namespace Californium
 
             foreach (var e in InArea(screenBounds))
             {
-                e.Draw(target);
+                e.Draw(rt, spriteBatch);
             }
         }
 

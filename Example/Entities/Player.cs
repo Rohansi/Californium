@@ -10,7 +10,7 @@ namespace Example.Entities
     {
         private const int SpriteSize = 8;
 
-        private Sprite sprite;
+        private BatchedSprite sprite;
 
         private float hSave, vSave;
         private bool keyW, keyA, keyS, keyD;
@@ -27,7 +27,7 @@ namespace Example.Entities
             Origin = new Vector2f(SpriteSize / 2, SpriteSize / 2);
             Size = new Vector2f(SpriteSize, SpriteSize);
 
-            sprite = new Sprite(Assets.LoadTexture("Player.png"))
+            sprite = new BatchedSprite(Assets.LoadTexture("Player.png"))
                      { Origin = Origin };
 
             // Player moves with WASD. Jumping is not continuous so there is a bit more work there
@@ -60,7 +60,7 @@ namespace Example.Entities
             }
         }
 
-        public override void Draw(RenderTarget rt)
+        public override void Draw(RenderTarget rt, SpriteBatch spriteBatch)
         {
             sprite.Position = Position;
             rt.Draw(sprite);

@@ -66,7 +66,7 @@ namespace Example.Entities
             text.Position = Position;
         }
 
-        public override void Draw(RenderTarget rt)
+        public override void Draw(RenderTarget rt, SpriteBatch spriteBatch)
         {
             var shape = new RectangleShape(Size)
                         { FillColor = new Color(255, 255, 255, 128), Position = Position };

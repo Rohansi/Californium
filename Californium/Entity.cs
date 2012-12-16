@@ -40,6 +40,6 @@ namespace Californium
         }
 
         public virtual void Update() { }
-        public virtual void Draw(RenderTarget rt) { }
+        public virtual void Draw(RenderTarget rt, SpriteBatch spriteBatch) { }
     }
 }

@@ -1,16 +1,41 @@
 ﻿using SFML.Graphics;
+using SFML.Window;
 
 namespace Californium
 {
-    public class AnimatedSprite : Transformable, Drawable
+    public class AnimatedSprite
     {
-        Sprite sprite;
+        BatchedSprite sprite;
         int frameWidth;
         int frameHeight;
         int totalFrames;
 
         int currentFrame;
         float elapsedTime;
+
+        public Vector2f Position
+        {
+            get { return sprite.Position; }
+            set { sprite.Position = value; }
+        }
+
+        public float Rotation
+        {
+            get { return sprite.Rotation; }
+            set { sprite.Rotation = value; }
+        }
+
+        public Vector2f Scale
+        {
+            get { return sprite.Scale; }
+            set { sprite.Scale = value; }
+        }
+
+        public Vector2f Origin
+        {
+            get { return sprite.Origin; }
+            set { sprite.Origin = value; }
+        }
 
         public int CurrentFrame
         { 
@@ -19,6 +44,7 @@ namespace Californium
             {
                 currentFrame = value % totalFrames;
                 sprite.TextureRect = new IntRect(currentFrame * frameWidth, 0, frameWidth, frameHeight);
+                sprite.Reset();
             } 
         }
 
@@ -29,7 +55,7 @@ namespace Californium
             this.frameWidth = frameWidth;
             this.frameHeight = frameHeight;
 
-            sprite = new Sprite(texture);
+            sprite = new BatchedSprite(texture);
             totalFrames = (int)(texture.Size.X / frameWidth) - 1;
             elapsedTime = 0;
 
@@ -50,10 +76,9 @@ namespace Californium
             CurrentFrame = currentFrame;
         }
 
-        public void Draw(RenderTarget target, RenderStates states)
+        public void Draw(SpriteBatch spriteBatch, int depth = 0)
         {
-            states.Transform *= Transform;
-            target.Draw(sprite, states);
+            spriteBatch.Draw(sprite, depth);
         }
     }
 }

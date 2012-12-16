@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Californium;
+﻿using Californium;
 
 namespace Example
 {

@@ -24,5 +24,7 @@
 
         public static int EntityGridSize = 64;
         public static float EntityOverscan = 64;
+
+        public static uint SpriteBatchSize = 512;
     }
 }

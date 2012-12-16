@@ -19,6 +19,7 @@ namespace Californium
         public Camera Camera;
         public EntityManager Entities;
         public TileMap Map;
+        public SpriteBatch SpriteBatch;
 
         public UpdateMode InactiveMode { get; protected set; }
         public Color ClearColor { get; protected set; }
@@ -33,6 +34,7 @@ namespace Californium
         {
             InitializeCamera();
             Entities = new EntityManager(this);
+            SpriteBatch = new SpriteBatch();
             InactiveMode = UpdateMode.All;
         }
 
@@ -60,7 +62,9 @@ namespace Californium
             if (Map != null)
                 Map.Draw(rt);
 
-            rt.Draw(Entities);
+            SpriteBatch.Begin();
+            Entities.Draw(rt, SpriteBatch);
+            SpriteBatch.End(rt, RenderStates.Default, true);
         }
 
         public virtual bool ProcessEvent(InputArgs args)
