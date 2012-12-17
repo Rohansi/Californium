@@ -3,38 +3,38 @@ using SFML.Window;
 
 namespace Californium
 {
-    public class AnimatedSprite
+    public class AnimatedSprite : Drawable
     {
-        BatchedSprite sprite;
-        int frameWidth;
-        int frameHeight;
-        int totalFrames;
+        internal BatchedSprite Sprite;
+        private int frameWidth;
+        private int frameHeight;
+        private int totalFrames;
 
-        int currentFrame;
-        float elapsedTime;
+        private int currentFrame;
+        private float elapsedTime;
 
         public Vector2f Position
         {
-            get { return sprite.Position; }
-            set { sprite.Position = value; }
+            get { return Sprite.Position; }
+            set { Sprite.Position = value; }
         }
 
         public float Rotation
         {
-            get { return sprite.Rotation; }
-            set { sprite.Rotation = value; }
+            get { return Sprite.Rotation; }
+            set { Sprite.Rotation = value; }
         }
 
         public Vector2f Scale
         {
-            get { return sprite.Scale; }
-            set { sprite.Scale = value; }
+            get { return Sprite.Scale; }
+            set { Sprite.Scale = value; }
         }
 
         public Vector2f Origin
         {
-            get { return sprite.Origin; }
-            set { sprite.Origin = value; }
+            get { return Sprite.Origin; }
+            set { Sprite.Origin = value; }
         }
 
         public int CurrentFrame
@@ -43,8 +43,8 @@ namespace Californium
             set 
             {
                 currentFrame = value % totalFrames;
-                sprite.TextureRect = new IntRect(currentFrame * frameWidth, 0, frameWidth, frameHeight);
-                sprite.Reset();
+                Sprite.TextureRect = new IntRect(currentFrame * frameWidth, 0, frameWidth, frameHeight);
+                Sprite.Reset();
             } 
         }
 
@@ -55,7 +55,7 @@ namespace Californium
             this.frameWidth = frameWidth;
             this.frameHeight = frameHeight;
 
-            sprite = new BatchedSprite(texture);
+            Sprite = new BatchedSprite(texture);
             totalFrames = (int)(texture.Size.X / frameWidth) - 1;
             elapsedTime = 0;
 
@@ -76,9 +76,9 @@ namespace Californium
             CurrentFrame = currentFrame;
         }
 
-        public void Draw(SpriteBatch spriteBatch, int depth = 0)
+        public void Draw(RenderTarget target, RenderStates states)
         {
-            spriteBatch.Draw(sprite, depth);
+            target.Draw(Sprite);
         }
     }
 }
