@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SFML.Graphics;
 using SFML.Window;
 
 namespace Californium
@@ -44,6 +45,31 @@ namespace Californium
             {
                 dict.Remove(cur.Key);
             }
+        }
+
+        public static void Center(this Text text, bool horizontal = true, bool vertical = true)
+        {
+            text.Origin = new Vector2f();
+
+            var bounds = text.GetGlobalBounds();
+            bounds.Left -= text.Position.X;
+            bounds.Top -= text.Position.Y;
+
+            text.Origin = new Vector2f(bounds.Left, bounds.Top);
+            
+            if (horizontal)
+                text.Origin += new Vector2f(bounds.Width / 2, 0);
+
+            if (vertical)
+                text.Origin += new Vector2f(0, bounds.Height / 2);
+
+            text.Origin.Round();
+        }
+
+        public static void Round(this Vector2f vec)
+        {
+            vec.X = (float)Math.Round(vec.X);
+            vec.Y = (float)Math.Round(vec.Y);
         }
     }
 }

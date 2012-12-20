@@ -63,7 +63,8 @@ namespace Example.Entities
 
             // Update the displayed text
             text.DisplayedString = "Score: " + Program.Score;
-            text.Position = Position;
+            text.Position = Position + new Vector2f(50, 50);
+            text.Center();
         }
 
         public override void Draw(RenderTarget rt, SpriteBatch spriteBatch)
