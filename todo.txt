@@ -1,10 +1,11 @@
 [ ] - Documentation
-[x] - Entity scale
-[x] - Linear tweening
 [ ] - Resource preloader
 [ ] - Smooth camera
 [ ] - Improve EntityManager
    [x] - Figure out how to remove the List<Entity>
    [ ] - Think of a way to remove GameOptions.EntityOverscan
 [x] - SpriteBatch
+[ ] - Window size constraints
+[ ] - State Enter/Leave, Active property
+[ ] - Entity Create/Destroy
 [ ] - Particle engine
