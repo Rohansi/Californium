@@ -67,7 +67,7 @@ namespace Example.Entities
             text.Center();
         }
 
-        public override void Draw(RenderTarget rt, SpriteBatch spriteBatch)
+        public override void Draw(RenderTarget rt)
         {
             var shape = new RectangleShape(Size)
                         { FillColor = new Color(255, 255, 255, 128), Position = Position };

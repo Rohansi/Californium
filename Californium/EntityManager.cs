@@ -69,7 +69,7 @@ namespace Californium
             }
         }
 
-        public void Draw(RenderTarget rt, SpriteBatch spriteBatch)
+        public void Draw(RenderTarget rt)
         {
             var view = rt.GetView();
             var screenBounds = new FloatRect
@@ -82,7 +82,7 @@ namespace Californium
 
             foreach (var e in InArea(screenBounds))
             {
-                e.Draw(rt, spriteBatch);
+                e.Draw(rt);
             }
         }
 

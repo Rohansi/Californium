@@ -23,9 +23,9 @@ namespace Example.Entities
             sprite.Update();
         }
 
-        public override void Draw(RenderTarget rt, SpriteBatch spriteBatch)
+        public override void Draw(RenderTarget rt)
         {
-            spriteBatch.Draw(sprite);
+            rt.Draw(sprite);
         }
     }
 }

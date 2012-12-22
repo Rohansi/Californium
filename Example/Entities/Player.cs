@@ -60,7 +60,7 @@ namespace Example.Entities
             }
         }
 
-        public override void Draw(RenderTarget rt, SpriteBatch spriteBatch)
+        public override void Draw(RenderTarget rt)
         {
             sprite.Position = Position;
             rt.Draw(sprite);
