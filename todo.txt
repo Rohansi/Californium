@@ -7,5 +7,6 @@
 [x] - SpriteBatch
 [ ] - Window size constraints
 [ ] - State Enter/Leave, Active property
+[ ] - TextEntered event
 [ ] - Entity Create/Destroy
 [ ] - Particle engine
