@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -19,11 +20,14 @@ namespace Californium
         }
 
         private static List<State> states;
+        private static List<bool> keyStates;
         private static Vector2f size;
 
         static Game()
         {
             states = new List<State>();
+            keyStates = new List<bool>();
+            keyStates.InsertRange(0, Enumerable.Repeat(false, (int)Keyboard.Key.KeyCount));
         }
 
         public static void Initialize()
@@ -37,16 +41,28 @@ namespace Californium
             Window = new RenderWindow(new VideoMode(GameOptions.Width, GameOptions.Height), GameOptions.Caption, style);
             Window.SetFramerateLimit(GameOptions.Framerate);
             Window.SetVerticalSyncEnabled(GameOptions.Vsync);
-            Window.SetKeyRepeatEnabled(false);
-
+            
             Window.Closed += (sender, args) => Window.Close();
             Window.Resized += (sender, args) => Resize(new Vector2f(args.Width, args.Height));
-            Window.KeyPressed += (sender, args) => DispatchEvent(new KeyInputArgs(args.Code, true, args.Control, args.Shift));
-            Window.KeyReleased += (sender, args) => DispatchEvent(new KeyInputArgs(args.Code, false, args.Control, args.Shift));
             Window.MouseButtonPressed += (sender, args) => DispatchEvent(new MouseButtonInputArgs(args.Button, true, args.X, args.Y));
             Window.MouseButtonReleased += (sender, args) => DispatchEvent(new MouseButtonInputArgs(args.Button, false, args.X, args.Y));
             Window.MouseWheelMoved += (sender, args) => DispatchEvent(new MouseWheelInputArgs(args.Delta, args.X, args.Y));
             Window.MouseMoved += (sender, args) => DispatchEvent(new MouseMoveInputArgs(args.X, args.Y));
+            Window.TextEntered += (sender, args) => DispatchEvent(new TextInputArgs(args.Unicode));
+
+            Window.KeyPressed += (sender, args) =>
+            {
+                if (keyStates[(int)args.Code]) // repeated key press
+                    return; 
+                keyStates[(int)args.Code] = true;
+                DispatchEvent(new KeyInputArgs(args.Code, true, args.Control, args.Shift));
+            };
+
+            Window.KeyReleased += (sender, args) =>
+            {
+                keyStates[(int)args.Code] = false;
+                DispatchEvent(new KeyInputArgs(args.Code, false, args.Control, args.Shift));
+            };
         }
 
         public static void Run()

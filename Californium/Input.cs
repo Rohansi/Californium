@@ -7,11 +7,13 @@ namespace Californium
     public class Input
     {
         public delegate bool KeyEvent(KeyInputArgs args);
+        public delegate bool TextEvent(TextInputArgs args);
         public delegate bool MouseButtonEvent(MouseButtonInputArgs args);
         public delegate bool MouseWheelEvent(MouseWheelInputArgs args);
         public delegate bool MouseMoveEvent(MouseMoveInputArgs args);
 
         public Dictionary<Keyboard.Key, KeyEvent> Key;
+        public TextEvent Text;
         public Dictionary<Mouse.Button, MouseButtonEvent> MouseButton;
         public MouseWheelEvent MouseWheel;
         public MouseMoveEvent MouseMove;
@@ -19,6 +21,7 @@ namespace Californium
         public Input()
         {
             Key = new Dictionary<Keyboard.Key, KeyEvent>();
+            Text = null;
             MouseButton = new Dictionary<Mouse.Button, MouseButtonEvent>();
             MouseWheel = null;
             MouseMove = null;
@@ -39,6 +42,11 @@ namespace Californium
 
                 if (Key.TryGetValue(eArgs.Key, out e))
                     return e(eArgs);
+            }
+            else if (Text != null && args is TextInputArgs)
+            {
+                var tArgs = (TextInputArgs)args;
+                return Text(tArgs);
             }
             else if (args is MouseButtonInputArgs)
             {
@@ -76,6 +84,16 @@ namespace Californium
             Pressed = pressed;
             Control = control;
             Shift = shift;
+        }
+    }
+
+    public class TextInputArgs : InputArgs
+    {
+        public string Text { get; protected set; }
+
+        public TextInputArgs(string text)
+        {
+            Text = text;
         }
     }
 
