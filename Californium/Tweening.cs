@@ -2,7 +2,7 @@
 
 namespace Californium
 {
-    public delegate double TweenFunc(double? overrideTimer);
+    public delegate double TweenFunc(double? overrideTimer = null);
     public delegate void TweenCallback();
 
     public enum TweenType
