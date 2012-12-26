@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -67,11 +69,11 @@ namespace Californium
         public static void Run()
         {
             var timer = new Stopwatch();
-            float accumulator = 0;
+            double accumulator = 0;
 
             while (Window.IsOpen())
             {
-                var time = (float)timer.Elapsed.TotalSeconds;
+                var time = timer.Elapsed.TotalSeconds;
                 timer.Restart();
 
                 accumulator += time;
@@ -93,16 +95,18 @@ namespace Californium
                     accumulator -= GameOptions.Timestep;
                 }
 
+
                 // Draw
+                var clearState = states.FindIndex(s => s.InactiveMode.HasFlag(State.UpdateMode.Draw)); 
                 for (var i = 0; i < states.Count; i++)
                 {
                     var state = states[i];
 
+                    if (i == clearState)
+                        Window.Clear(state.ClearColor);
+
                     if (i != states.Count - 1 && !state.InactiveMode.HasFlag(State.UpdateMode.Draw))
                         continue;
-
-                    if (i == 0)
-                        Window.Clear(state.ClearColor);
 
                     state.Draw(Window);
                 }
@@ -111,25 +115,33 @@ namespace Californium
             }
         }
 
-        public static void Stop()
+        public static void Exit()
         {
             Window.Close();
         }
 
         public static void SetState(State state)
         {
+            foreach (var s in states)
+            {
+                s.Leave();
+            }
+
             states.Clear();
-            states.Add(state);
+            PushState(state);
         }
 
         public static void PushState(State state)
         {
+            state.Enter();
             states.Add(state);
         }
 
         public static void PopState()
         {
-            states.RemoveAt(states.Count - 1);
+            var last = states.Count - 1;
+            states[last].Leave();
+            states.RemoveAt(last);
         }
 
         private static void DispatchEvent(InputArgs args)
@@ -152,6 +164,11 @@ namespace Californium
             {
                 state.InitializeCamera();
             }
+        }
+
+        internal static bool IsActive(State state)
+        {
+            return states.IndexOf(state) == (states.Count - 1);
         }
     }
 }

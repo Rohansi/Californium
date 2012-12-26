@@ -107,6 +107,13 @@ namespace Californium
                 inputEntities.Remove(e);
         }
 
+        public void Clear()
+        {
+            entities.Clear();
+            inputEntities.Clear();
+            entityGrid.Clear();
+        }
+
         public IEnumerable<Entity> InArea(FloatRect rect)
         {
             var overscan = GameOptions.EntityOverscan;

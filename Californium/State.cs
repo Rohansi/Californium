@@ -29,30 +29,56 @@ namespace Californium
             get { return input ?? (input = new Input()); }
         }
 
+        /// <summary>
+        /// Returns true if this State is at the top of the State stack.
+        /// </summary>
+        public bool Active
+        {
+            get { return Game.IsActive(this); }
+        }
+
         protected State()
         {
-            InitializeCamera();
             Entities = new EntityManager(this);
             InactiveMode = UpdateMode.All;
         }
 
-        public bool PlaceFree(FloatRect r)
+        /// <summary>
+        /// Called when the State's Camera needs to be (re)initialized.
+        /// </summary>
+        public virtual void InitializeCamera()
         {
-            return Map.PlaceFree(r) && Entities.PlaceFree(r);
+            Camera = new Camera(Game.DefaultView);
         }
 
-        internal void UpdateInternal()
+        /// <summary>
+        /// Called when a State is added to the game. InitializeCamera is called here by default.
+        /// </summary>
+        public virtual void Enter()
         {
-            Entities.Update();
-            Update();
-            Camera.Update();
+            InitializeCamera();
         }
 
+        /// <summary>
+        /// Called when a State is removed from the game.
+        /// </summary>
+        public virtual void Leave()
+        {
+            
+        }
+
+        /// <summary>
+        /// Update is called once every Timestep. Game logic should be handled here (movement, animations, etc).
+        /// </summary>
         public virtual void Update()
         {
             
         }
 
+        /// <summary>
+        /// Called once per frame, right after Update. Avoid putting game login in here.
+        /// </summary>
+        /// <param name="rt"></param>
         public virtual void Draw(RenderTarget rt)
         {
             Camera.Apply(rt);
@@ -63,16 +89,18 @@ namespace Californium
             Entities.Draw(rt);
         }
 
-        public virtual bool ProcessEvent(InputArgs args)
+        public bool ProcessEvent(InputArgs args)
         {
             if (input != null && input.ProcessInput(args))
                 return true;
             return Entities.ProcessInput(args);
         }
 
-        public virtual void InitializeCamera()
+        internal void UpdateInternal()
         {
-            Camera = new Camera(Game.DefaultView);
+            Entities.Update();
+            Update();
+            Camera.Update();
         }
     }
 }
