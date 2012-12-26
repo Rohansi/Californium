@@ -6,7 +6,8 @@
    [ ] - Think of a way to remove GameOptions.EntityOverscan
 [x] - SpriteBatch
 [ ] - Window size constraints
+[ ] - Fix first and last State detection in Game.Run
 [ ] - State Enter/Leave, Active property
-[ ] - TextEntered event
 [ ] - Entity Create/Destroy
+[x] - TextEntered event
 [ ] - Particle engine

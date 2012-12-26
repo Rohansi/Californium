@@ -66,10 +66,11 @@ namespace Californium
             text.Origin.Round();
         }
 
-        public static void Round(this Vector2f vec)
+        public static Vector2f Round(this Vector2f vec)
         {
             vec.X = (float)Math.Round(vec.X);
             vec.Y = (float)Math.Round(vec.Y);
+            return vec;
         }
     }
 }
