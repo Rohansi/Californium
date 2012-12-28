@@ -34,10 +34,23 @@ namespace Californium
         public Vector2f Size = new Vector2f();
         public Vector2f Scale = new Vector2f(1, 1);
 
+        /// <summary>
+        /// Returns a bounding box based on Position, Origin, Size and Scale.
+        /// </summary>
         public virtual FloatRect BoundingBox
         {
             get { return new FloatRect(Position.X - (Origin.X * Scale.X), Position.Y - (Origin.Y * Scale.Y), Size.X * Scale.X, Size.Y * Scale.Y); }
         }
+
+        /// <summary>
+        /// Called when the Entity is being added to an EntityManager. Unlike the constructor, Parent is valid when Create is called.
+        /// </summary>
+        public virtual void Create() { }
+
+        /// <summary>
+        /// Called when the Entity is being removed from an EntityManager.
+        /// </summary>
+        public virtual void Destroy() { }
 
         public virtual void Update() { }
         public virtual void Draw(RenderTarget rt) { }

@@ -8,7 +8,7 @@
 [ ] - Window size constraints
 [x] - Fix first and last State detection in Game.Run
 [x] - State Enter/Leave, Active property
-[ ] - Entity Create/Destroy
+[x] - Entity Create/Destroy
 [x] - TextEntered event
 [ ] - Particle engine
 [ ] - Close handlers for States (allow cancel and stuff)

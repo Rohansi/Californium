@@ -63,10 +63,10 @@ namespace Californium
             if (vertical)
                 text.Origin += new Vector2f(0, (bounds.Height / text.Scale.Y) / 2);
 
-            text.Origin.Round();
+            text.Origin = Round(text.Origin);
         }
 
-        public static Vector2f Round(this Vector2f vec)
+        public static Vector2f Round(Vector2f vec)
         {
             vec.X = (float)Math.Round(vec.X);
             vec.Y = (float)Math.Round(vec.Y);

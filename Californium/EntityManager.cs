@@ -94,6 +94,8 @@ namespace Californium
 
             GridAdd(e);
 
+            e.Create();
+
             if (e.Input != null)
                 inputEntities.Add(e);
         }
@@ -105,10 +107,17 @@ namespace Californium
 
             if (e.Input != null)
                 inputEntities.Remove(e);
+
+            e.Destroy();
         }
 
         public void Clear()
         {
+            foreach (var e in entities)
+            {
+                e.Destroy();
+            }
+
             entities.Clear();
             inputEntities.Clear();
             entityGrid.Clear();
