@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using SFML.Graphics;
 using SFML.Window;
 
 namespace Californium
 {
-    public class EntityManager
+    public class EntityManager : IEnumerable<Entity>
     {
         private const float CleanupEvery = 60.0f;
 
@@ -163,6 +164,22 @@ namespace Californium
         public bool PlaceFree(FloatRect rect)
         {
             return InArea(rect).All(entity => entity == currentEntity || !entity.Solid || !entity.BoundingBox.Intersects(rect));
+        }
+
+        public IEnumerator<Entity> GetEnumerator()
+        {
+            var cur = entities.First;
+            while (cur != null)
+            {
+                var next = cur.Next;
+                yield return cur.Value;
+                cur = next;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         internal void AddInput(Entity e)
