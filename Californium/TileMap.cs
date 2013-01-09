@@ -64,7 +64,7 @@ namespace Californium
                 {
                     for (var x = startX; x < endX; x++)
                     {
-                        if (tiles[x, y].Index >= lastTile) continue;
+                        if (tiles[x, y].Index > lastTile) continue;
 
                         var last = vertexArray.VertexCount;
                         vertexArray.Resize(vertexArray.VertexCount + 4);
@@ -114,15 +114,13 @@ namespace Californium
             Width = width;
             Height = height;
 
-            var lastTile = texture == null ? ushort.MaxValue : (ushort)((texture.Size.X / GameOptions.TileSize) * (texture.Size.Y / GameOptions.TileSize) - 1);
-
             tiles = new Tile[width, height];
 
             for (var y = 0; y < height; y++)
             {
                 for (var x = 0; x < width; x++)
                 {
-                    tiles[x, y].Index = lastTile;
+                    tiles[x, y].Index = ushort.MaxValue;
                     tiles[x, y].Solid = false;
                 }
             }

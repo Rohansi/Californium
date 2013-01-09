@@ -55,22 +55,22 @@ namespace Californium
             bounds.Left -= text.Position.X;
             bounds.Top -= text.Position.Y;
 
-            text.Origin = new Vector2f(bounds.Left / text.Scale.X, bounds.Top / text.Scale.Y);
-            
+            var x = bounds.Left / text.Scale.X;
+            var y = bounds.Top / text.Scale.Y;
+
             if (horizontal)
-                text.Origin += new Vector2f((bounds.Width / text.Scale.X) / 2, 0);
+                x += (bounds.Width / text.Scale.X) / 2;
 
             if (vertical)
-                text.Origin += new Vector2f(0, (bounds.Height / text.Scale.Y) / 2);
+                y += (bounds.Height / text.Scale.Y) / 2;
 
-            text.Origin = Round(text.Origin);
+            text.Origin = new Vector2f(x, y);
         }
 
-        public static Vector2f Round(Vector2f vec)
+        public static void Round(this Transformable trans)
         {
-            vec.X = (float)Math.Round(vec.X);
-            vec.Y = (float)Math.Round(vec.Y);
-            return vec;
+            trans.Position = new Vector2f((float)Math.Round(trans.Position.X), (float)Math.Round(trans.Position.Y));
+            trans.Origin = new Vector2f((float)Math.Round(trans.Origin.X), (float)Math.Round(trans.Origin.Y));
         }
     }
 }
