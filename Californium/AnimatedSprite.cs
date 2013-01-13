@@ -5,7 +5,7 @@ namespace Californium
 {
     public class AnimatedSprite : Drawable
     {
-        internal BatchedSprite Sprite;
+        internal Sprite Sprite;
         private int frameWidth;
         private int frameHeight;
         private int totalFrames;
@@ -44,7 +44,6 @@ namespace Californium
             {
                 currentFrame = value % totalFrames;
                 Sprite.TextureRect = new IntRect(currentFrame * frameWidth, 0, frameWidth, frameHeight);
-                Sprite.Reset();
             } 
         }
 
@@ -55,7 +54,7 @@ namespace Californium
             this.frameWidth = frameWidth;
             this.frameHeight = frameHeight;
 
-            Sprite = new BatchedSprite(texture);
+            Sprite = new Sprite(texture);
             totalFrames = (int)(texture.Size.X / frameWidth) - 1;
             elapsedTime = 0;
 

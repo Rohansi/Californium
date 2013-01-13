@@ -85,11 +85,6 @@ namespace Californium
             sprites.Add(Tuple.Create(depth, sprite));
         }
 
-        public void Draw(AnimatedSprite sprite, int depth = 0)
-        {
-            Draw(sprite.Sprite, depth);
-        }
-
         // http://en.sfml-dev.org/forums/index.php?topic=8660.msg68104#msg68104
         public void WriteQuad(int offset, Vector2f position, IntRect rect, Color color, Vector2f scale, Vector2f origin, float rotation)
         {

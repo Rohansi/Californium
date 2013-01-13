@@ -14,38 +14,38 @@ namespace Californium
             public float Time;
         }
 
-        private static List<TimerInfo> timers = new List<TimerInfo>();
+        private static readonly List<TimerInfo> Timers = new List<TimerInfo>();
 
         public static void NextFrame(TimerEvent callback)
         {
-            timers.Add(new TimerInfo { Event = () => { callback(); return true; } });
+            Timers.Add(new TimerInfo { Event = () => { callback(); return true; } });
         }
 
         public static void EveryFrame(RepeatingTimerEvent callback)
         {
-            timers.Add(new TimerInfo { Event = callback });
+            Timers.Add(new TimerInfo { Event = callback });
         }
 
-        public static void After(float time, TimerEvent callback)
+        public static void After(float seconds, TimerEvent callback)
         {
-            timers.Add(new TimerInfo { Event = () => { callback(); return true; }, Time = time });
+            Timers.Add(new TimerInfo { Event = () => { callback(); return true; }, Time = seconds });
         }
 
-        public static void Every(float time, RepeatingTimerEvent callback)
+        public static void Every(float seconds, RepeatingTimerEvent callback)
         {
-            timers.Add(new TimerInfo { Event = callback, StartTime = time, Time = time });
+            Timers.Add(new TimerInfo { Event = callback, StartTime = seconds, Time = seconds });
         }
 
         public static void Update()
         {
-            var readonlyTimers = new List<TimerInfo>(timers);
+            var readonlyTimers = new List<TimerInfo>(Timers);
             var toRemove = new List<TimerInfo>();
 
             foreach (var timer in readonlyTimers)
             {
                 timer.Time -= GameOptions.Timestep;
 
-                if (!(timer.Time <= 0))
+                if (timer.Time > 0)
                     continue;
 
                 if (timer.Event())
@@ -54,7 +54,7 @@ namespace Californium
                     timer.Time = timer.StartTime;
             }
 
-            timers.RemoveAll(toRemove.Contains);
+            Timers.RemoveAll(toRemove.Contains);
         }
     }
 }

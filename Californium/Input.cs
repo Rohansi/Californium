@@ -12,17 +12,17 @@ namespace Californium
         public delegate bool MouseWheelEvent(MouseWheelInputArgs args);
         public delegate bool MouseMoveEvent(MouseMoveInputArgs args);
 
-        public Dictionary<Keyboard.Key, KeyEvent> Key;
+        public readonly Dictionary<Keyboard.Key, KeyEvent> Key;
+        public readonly Dictionary<Mouse.Button, MouseButtonEvent> MouseButton;
         public TextEvent Text;
-        public Dictionary<Mouse.Button, MouseButtonEvent> MouseButton;
         public MouseWheelEvent MouseWheel;
         public MouseMoveEvent MouseMove;
 
         public Input()
         {
             Key = new Dictionary<Keyboard.Key, KeyEvent>();
-            Text = null;
             MouseButton = new Dictionary<Mouse.Button, MouseButtonEvent>();
+            Text = null;
             MouseWheel = null;
             MouseMove = null;
         }
@@ -45,8 +45,8 @@ namespace Californium
             }
             else if (Text != null && args is TextInputArgs)
             {
-                var tArgs = (TextInputArgs)args;
-                return Text(tArgs);
+                var eArgs = (TextInputArgs)args;
+                return Text(eArgs);
             }
             else if (args is MouseButtonInputArgs)
             {

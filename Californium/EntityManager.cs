@@ -184,6 +184,8 @@ namespace Californium
 
         internal void AddInput(Entity e)
         {
+            if (inputEntities.Contains(e))
+                return;
             inputEntities.Add(e);
         }
 

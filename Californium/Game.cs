@@ -10,6 +10,7 @@ namespace Californium
     public static class Game
     {
         public static RenderWindow Window;
+
         public static View DefaultView
         {
             get
@@ -20,14 +21,20 @@ namespace Californium
             }
         }
 
-        private static List<State> states;
-        private static bool[] keyStates;
+        public static Stack<State> States
+        {
+            get { return new Stack<State>(StateStack); }
+        } 
+
+        private static readonly List<State> StateStack;
+        private static readonly bool[] KeyStates;
+
         private static Vector2f size;
 
         static Game()
         {
-            states = new List<State>();
-            keyStates = new bool[(int)Keyboard.Key.KeyCount];
+            StateStack = new List<State>();
+            KeyStates = new bool[(int)Keyboard.Key.KeyCount];
         }
 
         public static void Initialize()
@@ -52,16 +59,16 @@ namespace Californium
 
             Window.KeyPressed += (sender, args) =>
             {
-                if (args.Code == Keyboard.Key.Unknown || keyStates[(int)args.Code]) // repeated key press
+                if (args.Code == Keyboard.Key.Unknown || KeyStates[(int)args.Code]) // repeated key press
                     return; 
-                keyStates[(int)args.Code] = true;
+                KeyStates[(int)args.Code] = true;
                 DispatchEvent(new KeyInputArgs(args.Code, true, args.Control, args.Shift));
             };
 
             Window.KeyReleased += (sender, args) =>
             {
                 if (args.Code != Keyboard.Key.Unknown)
-                    keyStates[(int)args.Code] = false;
+                    KeyStates[(int)args.Code] = false;
                 DispatchEvent(new KeyInputArgs(args.Code, false, args.Control, args.Shift));
             };
         }
@@ -84,11 +91,11 @@ namespace Californium
                     Window.DispatchEvents();
                     Timer.Update();
 
-                    for (var i = 0; i < states.Count; i++)
+                    for (var i = 0; i < StateStack.Count; i++)
                     {
-                        var state = states[i];
+                        var state = StateStack[i];
 
-                        if (i == states.Count - 1 || state.InactiveMode.HasFlag(State.UpdateMode.Update))
+                        if (i == StateStack.Count - 1 || state.InactiveMode.HasFlag(State.UpdateMode.Update))
                             state.UpdateInternal();
                     }
 
@@ -97,15 +104,15 @@ namespace Californium
 
 
                 // Draw
-                var clearState = states.FindIndex(s => s.InactiveMode.HasFlag(State.UpdateMode.Draw)); 
-                for (var i = 0; i < states.Count; i++)
+                var clearState = StateStack.FindIndex(s => s.InactiveMode.HasFlag(State.UpdateMode.Draw)); 
+                for (var i = 0; i < StateStack.Count; i++)
                 {
-                    var state = states[i];
+                    var state = StateStack[i];
 
                     if (i == clearState)
                         Window.Clear(state.ClearColor);
 
-                    if (i != states.Count - 1 && !state.InactiveMode.HasFlag(State.UpdateMode.Draw))
+                    if (i != StateStack.Count - 1 && !state.InactiveMode.HasFlag(State.UpdateMode.Draw))
                         continue;
 
                     state.Draw(Window);
@@ -122,36 +129,36 @@ namespace Californium
 
         public static void SetState(State state)
         {
-            foreach (var s in states)
+            foreach (var s in StateStack)
             {
                 s.Leave();
             }
 
-            states.Clear();
+            StateStack.Clear();
             PushState(state);
         }
 
         public static void PushState(State state)
         {
             state.Enter();
-            states.Add(state);
+            StateStack.Add(state);
         }
 
         public static void PopState()
         {
-            var last = states.Count - 1;
-            states[last].Leave();
-            states.RemoveAt(last);
+            var last = StateStack.Count - 1;
+            StateStack[last].Leave();
+            StateStack.RemoveAt(last);
         }
 
         private static void DispatchEvent(InputArgs args)
         {
-            for (var i = states.Count - 1; i >= 0; i--)
+            for (var i = StateStack.Count - 1; i >= 0; i--)
             {
-                var state = states[i];
+                var state = StateStack[i];
 
                 args.View = state.Camera.View;
-                if (states[i].ProcessEvent(args))
+                if (StateStack[i].ProcessEvent(args))
                     return;
             }
         }
@@ -160,7 +167,7 @@ namespace Californium
         {
             size = newSize;
 
-            foreach (var state in states)
+            foreach (var state in StateStack)
             {
                 state.InitializeCamera();
             }
@@ -168,7 +175,7 @@ namespace Californium
 
         internal static bool IsActive(State state)
         {
-            return states.IndexOf(state) == (states.Count - 1);
+            return StateStack.IndexOf(state) == (StateStack.Count - 1);
         }
     }
 }
