@@ -55,14 +55,20 @@ namespace Californium
             bounds.Left -= text.Position.X;
             bounds.Top -= text.Position.Y;
 
-            var x = bounds.Left / text.Scale.X;
-            var y = bounds.Top / text.Scale.Y;
+            var x = 0f;
+            var y = 0f;
 
             if (horizontal)
+            {
+                x = bounds.Left / text.Scale.X;
                 x += (bounds.Width / text.Scale.X) / 2;
+            }
 
             if (vertical)
+            {
+                y = bounds.Top / text.Scale.Y;
                 y += (bounds.Height / text.Scale.Y) / 2;
+            }
 
             text.Origin = new Vector2f(x, y);
         }
