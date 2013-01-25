@@ -10,13 +10,13 @@ namespace Californium
     {
         private const float CleanupEvery = 60.0f;
 
-        private LinkedList<Entity> entities;
-        private List<Entity> inputEntities;
+        private readonly LinkedList<Entity> entities;
+        private readonly List<Entity> inputEntities;
 
-        private Dictionary<Vector2i, LinkedList<Entity>> entityGrid;
+        private readonly Dictionary<Vector2i, LinkedList<Entity>> entityGrid;
         private float cleanupTimer;
 
-        private State parent;
+        private readonly State parent;
 
         private Entity currentEntity;
 

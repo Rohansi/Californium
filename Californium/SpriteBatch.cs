@@ -187,7 +187,7 @@ namespace Californium
             }
             catch
             {
-                throw new Exception("SpriteBatch size is too small");
+                throw new Exception("SpriteBatchSize is too small");
             }
 
             freeRects.Remove(r);

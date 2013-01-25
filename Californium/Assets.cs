@@ -11,53 +11,53 @@ namespace Californium
         private static readonly Dictionary<string, Texture> Textures = new Dictionary<string, Texture>();
         public static Texture LoadTexture(string name)
         {
-            Texture t;
+            Texture texture;
 
-            if (Textures.TryGetValue(name, out t))
-                return t;
+            if (Textures.TryGetValue(name, out texture))
+                return texture;
 
-            t = new Texture(Path.Combine(GameOptions.TextureLocation, name));
-            Textures.Add(name, t);
+            texture = new Texture(Path.Combine(GameOptions.TextureLocation, name));
+            Textures.Add(name, texture);
 
-            return t;
+            return texture;
         }
 
         private static readonly Dictionary<string, Font> Fonts = new Dictionary<string, Font>();
         public static Font LoadFont(string name)
         {
-            Font t;
+            Font font;
 
-            if (Fonts.TryGetValue(name, out t))
-                return t;
+            if (Fonts.TryGetValue(name, out font))
+                return font;
 
-            t = new Font(Path.Combine(GameOptions.FontLocation, name));
-            Fonts.Add(name, t);
+            font = new Font(Path.Combine(GameOptions.FontLocation, name));
+            Fonts.Add(name, font);
 
-            return t;
+            return font;
         }
 
         private static readonly Dictionary<string, SoundBuffer> Buffers = new Dictionary<string, SoundBuffer>();
         public static SoundBuffer LoadSound(string name)
         {
-            SoundBuffer sb;
+            SoundBuffer soundBuffer;
 
-            if (!Buffers.TryGetValue(name, out sb))
+            if (!Buffers.TryGetValue(name, out soundBuffer))
             {
-                sb = new SoundBuffer(Path.Combine(GameOptions.SoundLocation, name));
-                Buffers.Add(name, sb);
+                soundBuffer = new SoundBuffer(Path.Combine(GameOptions.SoundLocation, name));
+                Buffers.Add(name, soundBuffer);
             }
 
-            return sb;
+            return soundBuffer;
         }
 
         private static readonly List<Sound> Sounds = new List<Sound>();
         public static void PlaySound(string name)
         {
-            var s = new Sound(LoadSound(name))
-                    { Volume = GameOptions.SoundVolume };
+            var sound = new Sound(LoadSound(name));
+            sound.Volume = GameOptions.SoundVolume;
             
-            s.Play();
-            Sounds.Add(s);
+            sound.Play();
+            Sounds.Add(sound);
 
             Sounds.RemoveAll(snd => snd.Status != SoundStatus.Playing);
         }
@@ -79,7 +79,7 @@ namespace Californium
 
             Timer.EveryFrame(() =>
             {
-                double dt = watch.Elapsed.TotalSeconds;
+                var dt = watch.Elapsed.TotalSeconds;
                 watch.Restart();
 
                 if (music != currentMusic && state != 3)

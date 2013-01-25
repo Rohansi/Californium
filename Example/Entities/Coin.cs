@@ -14,8 +14,9 @@ namespace Example.Entities
             Origin = new Vector2f(8, 8);
             Size = new Vector2f(16, 16);
 
-            sprite = new AnimatedSprite(Assets.LoadTexture("Coin.png"), 16, 16, .075f)
-                     { Position = Position, Origin = Origin };
+            sprite = new AnimatedSprite(Assets.LoadTexture("Coin.png"), 16, 16, .075f);
+            sprite.Position = Position;
+            sprite.Origin = Origin;
         }
 
         public override void Update()

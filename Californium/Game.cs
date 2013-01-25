@@ -48,6 +48,12 @@ namespace Californium
             Window = new RenderWindow(new VideoMode(GameOptions.Width, GameOptions.Height), GameOptions.Caption, style);
             Window.SetFramerateLimit(GameOptions.Framerate);
             Window.SetVerticalSyncEnabled(GameOptions.Vsync);
+
+            if (!string.IsNullOrEmpty(GameOptions.Icon))
+            {
+                var icon = Assets.LoadTexture(GameOptions.Icon);
+                Window.SetIcon(icon.Size.X, icon.Size.Y, icon.CopyToImage().Pixels);
+            }
             
             Window.Closed += (sender, args) => Window.Close();
             Window.Resized += (sender, args) => Resize(new Vector2f(args.Width, args.Height));

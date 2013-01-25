@@ -15,8 +15,9 @@ namespace Example.Entities
             Size = new Vector2f(100, 100);
             Position = new Vector2f(10, 10);
 
-            text = new Text("", Assets.LoadFont("OpenSans-Regular.ttf"))
-                   { CharacterSize = 18, Color = Color.Black };
+            text = new Text("", Assets.LoadFont("OpenSans-Regular.ttf"));
+            text.CharacterSize = 18;
+            text.Color = Color.Black;
             
             // Begin/end drag on press/release
             Input.MouseButton[Mouse.Button.Left] = args =>
@@ -69,8 +70,9 @@ namespace Example.Entities
 
         public override void Draw(RenderTarget rt)
         {
-            var shape = new RectangleShape(Size)
-                        { FillColor = new Color(255, 255, 255, 128), Position = Position };
+            var shape = new RectangleShape(Size);
+            shape.FillColor = new Color(255, 255, 255, 128);
+            shape.Position = Position;
 
             rt.Draw(shape);
             rt.Draw(text);

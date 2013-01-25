@@ -3,6 +3,7 @@
     public static class GameOptions
     {
         public static string Caption = "";
+        public static string Icon = "";
         public static uint Width = 800;
         public static uint Height = 600;
         public static bool Resizable = true;

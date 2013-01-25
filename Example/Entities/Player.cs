@@ -8,8 +8,6 @@ namespace Example.Entities
 {
     class Player : Entity
     {
-        private const int SpriteSize = 8;
-
         private Sprite sprite;
 
         private float hSave, vSave;
@@ -24,11 +22,15 @@ namespace Example.Entities
         {
             Solid = true;
             Position = position;
-            Origin = new Vector2f(SpriteSize / 2, SpriteSize / 2);
-            Size = new Vector2f(SpriteSize, SpriteSize);
 
-            sprite = new Sprite(Assets.LoadTexture("Player.png"))
-                     { Origin = Origin };
+            sprite = new Sprite(Assets.LoadTexture("Player.png"));
+
+            var size = (int)sprite.Texture.Size.X;
+            var center = sprite.Texture.Size.X / 2;
+
+            Origin = new Vector2f(center, center);
+            Size = new Vector2f(size, size);
+            sprite.Origin = Origin;
 
             // Player moves with WASD. Jumping is not continuous so there is a bit more work there
             Input.Key[Keyboard.Key.W] = args =>
@@ -157,7 +159,7 @@ namespace Example.Entities
                     hSpeed = 0;
                     break;
                 }
-                
+
                 // Otherwise we continue to move
                 Position.X += Math.Sign(hMove);
             }
