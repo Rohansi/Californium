@@ -78,8 +78,6 @@ namespace Californium
         /// </summary>
         public virtual void Draw(RenderTarget rt)
         {
-            Camera.Apply(rt);
-
             if (Map != null)
                 Map.Draw(rt);
 
@@ -98,6 +96,12 @@ namespace Californium
             Entities.Update();
             Update();
             Camera.Update();
+        }
+
+        internal void DrawInternal(RenderTarget rt)
+        {
+            Camera.Apply(rt);
+            Draw(rt);
         }
     }
 }

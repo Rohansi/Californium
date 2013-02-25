@@ -130,7 +130,7 @@ namespace Californium
                     if (i != StateStack.Count - 1 && !state.InactiveMode.HasFlag(State.UpdateMode.Draw))
                         continue;
 
-                    state.Draw(Window);
+                    state.DrawInternal(Window);
                 }
 
                 Window.Display();

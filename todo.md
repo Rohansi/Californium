@@ -2,9 +2,9 @@ Documentation
 
 More meaningful Camera class (zoom get/set, optional rounding, etc.)
 
-Particle engine
+Builtin Framerate calculation
 
-Resource preloading (non-threaded version?)
+Particle engine
 
 Resource unloading
 

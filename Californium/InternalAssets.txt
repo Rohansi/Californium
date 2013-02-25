@@ -1,0 +1,163 @@
+// For future use
+
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using SFML.Graphics;
+using SFML.Audio;
+
+namespace Californium
+{
+	public static class Assets
+	{
+		private static readonly Dictionary<string, Texture> textures = new Dictionary<string, Texture>();
+		private static readonly Dictionary<string, SoundBuffer> buffers = new Dictionary<string, SoundBuffer>();
+		private static readonly Dictionary<string, Font> fonts = new Dictionary<string, Font>();
+		private static readonly List<Sound> sounds = new List<Sound>();
+		private static Music currentMusic;
+
+		private static Assembly assembly;
+		private static string assetsPath;
+
+		static Assets()
+		{
+			assembly = null;
+		}
+
+		public static void SetAssembly(Assembly usableAssembly)
+		{
+			var fullPath = "";
+
+			assembly = usableAssembly;
+
+			var resourceNamespaces = assembly.GetManifestResourceNames().FirstOrDefault();
+			if (resourceNamespaces == null)
+			{
+				assembly = null;
+				return;
+			}
+
+			var namespaces = resourceNamespaces.Split(new[] { '.' });
+			foreach (var n in namespaces)
+			{
+				if (n.ToLower() == "assets")
+				{
+					fullPath += n + ".";
+					break;
+				}
+
+				fullPath += n + ".";
+			}
+
+			assetsPath = fullPath;
+		}
+
+		public static Texture LoadTexture(string name)
+		{
+			Texture texture;
+
+			if (textures.TryGetValue(name, out texture))
+				return texture;
+
+			texture = assembly == null
+				? new Texture(Path.Combine(GameOptions.TextureLocation, name))
+				: new Texture(assembly.GetManifestResourceStream(assetsPath + "Texture." + name));
+
+			textures.Add(name, texture);
+
+			return texture;
+		}
+
+		public static Font LoadFont(string name)
+		{
+			Font font;
+
+			if (fonts.TryGetValue(name, out font))
+				return font;
+
+			font = assembly == null
+				? new Font(Path.Combine(GameOptions.FontLocation, name))
+				: new Font(assembly.GetManifestResourceStream(assetsPath + "Font." + name));
+
+			fonts.Add(name, font);
+
+			return font;
+		}
+
+		public static SoundBuffer LoadSound(string name)
+		{
+			SoundBuffer soundBuffer;
+
+			if (!buffers.TryGetValue(name, out soundBuffer))
+			{
+				soundBuffer = assembly == null
+					? new SoundBuffer(Path.Combine(GameOptions.SoundLocation, name))
+					: new SoundBuffer(assembly.GetManifestResourceStream(assetsPath + "Sound." + name));
+
+				buffers.Add(name, soundBuffer);
+			}
+
+			return soundBuffer;
+		}
+
+		public static void PlaySound(string name)
+		{
+			var sound = new Sound(LoadSound(name)) { Volume = GameOptions.SoundVolume };
+
+			sound.Play();
+			sounds.Add(sound);
+
+			sounds.RemoveAll(snd => snd.Status != SoundStatus.Playing);
+		}
+
+		public static void PlayMusic(string name)
+		{
+			var state = 0;
+			var tween = Tween.Create(TweenType.OutQuad, 0, GameOptions.MusicVolume, 0.5f, () => state = 1);
+			var music = new Music(Path.Combine(GameOptions.MusicLocation, name));
+			var watch = new Stopwatch();
+
+			currentMusic = music;
+
+			music.Volume = 0;
+			music.Play();
+
+			watch.Start();
+
+			Timer.EveryFrame(() =>
+			{
+				var dt = watch.Elapsed.TotalSeconds;
+				watch.Restart();
+
+				if (music != currentMusic && state != 3)
+					state = 2;
+
+				switch (state)
+				{
+					case 0: // fade in
+						music.Volume = (float)tween(dt);
+						break;
+					case 1: // normal play
+						if (music.PlayingOffset.TotalSeconds >= music.Duration.TotalSeconds - 1)
+							state = 2;
+						break;
+					case 2: // setup fadeout
+						tween = Tween.Create(TweenType.OutQuad, music.Volume, 0, 0.5f, () => state = 10);
+						state = 3;
+						break;
+					case 3: // fade out
+						music.Volume = (float)tween(dt);
+
+						if (state != 3)
+							return true;
+
+						break;
+				}
+
+				return false;
+			});
+		}
+	}
+}
