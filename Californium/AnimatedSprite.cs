@@ -6,9 +6,9 @@ namespace Californium
     public class AnimatedSprite : Drawable
     {
         internal Sprite Sprite;
-        private int frameWidth;
-        private int frameHeight;
-        private int totalFrames;
+        private readonly int frameWidth;
+        private readonly int frameHeight;
+        private readonly int totalFrames;
 
         private int currentFrame;
         private float elapsedTime;

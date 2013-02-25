@@ -16,6 +16,8 @@ namespace Californium
             All = Input | Update | Draw
         }
 
+        private Input input;
+
         public Camera Camera;
         public EntityManager Entities;
         public TileMap Map;
@@ -23,7 +25,9 @@ namespace Californium
         public UpdateMode InactiveMode { get; protected set; }
         public Color ClearColor { get; protected set; }
 
-        private Input input;
+        /// <summary>
+        /// Gets the state's associated Input instance. Handlers should return true if the event was used or false if it was ignored. 
+        /// </summary>
         public Input Input
         {
             get { return input ?? (input = new Input()); }
@@ -62,23 +66,16 @@ namespace Californium
         /// <summary>
         /// Called when a State is removed from the game.
         /// </summary>
-        public virtual void Leave()
-        {
-            
-        }
+        public virtual void Leave() { }
 
         /// <summary>
         /// Update is called once every Timestep. Game logic should be handled here (movement, animations, etc).
         /// </summary>
-        public virtual void Update()
-        {
-            
-        }
+        public virtual void Update() { }
 
         /// <summary>
-        /// Called once per frame, right after Update. Avoid putting game login in here.
+        /// Called once per frame, right after Update. Avoid putting game logic in here.
         /// </summary>
-        /// <param name="rt"></param>
         public virtual void Draw(RenderTarget rt)
         {
             Camera.Apply(rt);
@@ -89,7 +86,7 @@ namespace Californium
             Entities.Draw(rt);
         }
 
-        public bool ProcessEvent(InputArgs args)
+        internal bool ProcessEvent(InputArgs args)
         {
             if (input != null && input.ProcessInput(args))
                 return true;

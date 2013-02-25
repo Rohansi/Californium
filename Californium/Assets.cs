@@ -9,6 +9,14 @@ namespace Californium
     public static class Assets
     {
         private static readonly Dictionary<string, Texture> Textures = new Dictionary<string, Texture>();
+        private static readonly Dictionary<string, Font> Fonts = new Dictionary<string, Font>();
+        private static readonly Dictionary<string, SoundBuffer> Buffers = new Dictionary<string, SoundBuffer>();
+        private static readonly List<Sound> Sounds = new List<Sound>();
+        private static Music currentMusic;
+
+        /// <summary>
+        /// Loads a texture from the base texture directory. LoadTexture will cache textures by name.
+        /// </summary>
         public static Texture LoadTexture(string name)
         {
             Texture texture;
@@ -22,7 +30,9 @@ namespace Californium
             return texture;
         }
 
-        private static readonly Dictionary<string, Font> Fonts = new Dictionary<string, Font>();
+        /// <summary>
+        /// Loads a font from the base font directory. LoadFont will cache fonts by name.
+        /// </summary>
         public static Font LoadFont(string name)
         {
             Font font;
@@ -36,7 +46,9 @@ namespace Californium
             return font;
         }
 
-        private static readonly Dictionary<string, SoundBuffer> Buffers = new Dictionary<string, SoundBuffer>();
+        /// <summary>
+        /// Loads a sound from the base sound directory. LoadSound will cache sounds by name.
+        /// </summary>
         public static SoundBuffer LoadSound(string name)
         {
             SoundBuffer soundBuffer;
@@ -50,7 +62,9 @@ namespace Californium
             return soundBuffer;
         }
 
-        private static readonly List<Sound> Sounds = new List<Sound>();
+        /// <summary>
+        /// Loads (if needed) a sound and plays it.
+        /// </summary>
         public static void PlaySound(string name)
         {
             var sound = new Sound(LoadSound(name));
@@ -62,7 +76,10 @@ namespace Californium
             Sounds.RemoveAll(snd => snd.Status != SoundStatus.Playing);
         }
 
-        private static Music currentMusic;
+        /// <summary>
+        /// Plays music. Only one song can be played at a time with this function. Music will
+        /// fade in/out with additional calls.
+        /// </summary>
         public static void PlayMusic(string name)
         {
             var state = 0;

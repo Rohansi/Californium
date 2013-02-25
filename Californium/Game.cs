@@ -24,7 +24,9 @@ namespace Californium
         public static Stack<State> States
         {
             get { return new Stack<State>(StateStack); }
-        } 
+        }
+
+        public static Action Lagging;
 
         private static readonly List<State> StateStack;
         private static readonly bool[] KeyStates;
@@ -49,7 +51,7 @@ namespace Californium
             Window.SetFramerateLimit(GameOptions.Framerate);
             Window.SetVerticalSyncEnabled(GameOptions.Vsync);
 
-            if (!string.IsNullOrEmpty(GameOptions.Icon))
+            if (!string.IsNullOrWhiteSpace(GameOptions.Icon))
             {
                 var icon = Assets.LoadTexture(GameOptions.Icon);
                 Window.SetIcon(icon.Size.X, icon.Size.Y, icon.CopyToImage().Pixels);
@@ -88,8 +90,16 @@ namespace Californium
             {
                 var time = timer.Elapsed.TotalSeconds;
                 timer.Restart();
-
                 accumulator += time;
+                
+                // Spiral of death fix
+                if (accumulator > (GameOptions.Timestep * GameOptions.MaxUpdatesPerFrame))
+                {
+                    if (Lagging != null)
+                        Lagging();
+
+                    accumulator = GameOptions.Timestep * GameOptions.MaxUpdatesPerFrame;
+                }
 
                 // Update
                 while (accumulator >= GameOptions.Timestep)
@@ -107,7 +117,6 @@ namespace Californium
 
                     accumulator -= GameOptions.Timestep;
                 }
-
 
                 // Draw
                 var clearState = StateStack.FindIndex(s => s.InactiveMode.HasFlag(State.UpdateMode.Draw)); 

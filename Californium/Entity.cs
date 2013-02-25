@@ -8,10 +8,16 @@ namespace Californium
     {
         internal LinkedListNode<Entity> Node;
         internal Vector2i GridCoordinate;
-
-        public State Parent;
-
         private Input input;
+
+        /// <summary>
+        /// Gets the entity's parent state
+        /// </summary>
+        public State Parent { get; internal set; }
+
+        /// <summary>
+        /// Gets the entity's associated Input instance. Handlers should return true if the event was used or false if it was ignored. 
+        /// </summary>
         public Input Input
         {
             get
@@ -29,6 +35,7 @@ namespace Californium
         }
 
         public bool Solid = false;
+        public float Depth = 0;
         public Vector2f Position = new Vector2f();
         public Vector2f Origin = new Vector2f();
         public Vector2f Size = new Vector2f();

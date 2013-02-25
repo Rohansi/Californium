@@ -12,10 +12,29 @@ namespace Californium
         public delegate bool MouseWheelEvent(MouseWheelInputArgs args);
         public delegate bool MouseMoveEvent(MouseMoveInputArgs args);
 
+        /// <summary>
+        /// Keyboard button event handlers
+        /// </summary>
         public readonly Dictionary<Keyboard.Key, KeyEvent> Key;
+
+        /// <summary>
+        /// Mouse button event handlers
+        /// </summary>
         public readonly Dictionary<Mouse.Button, MouseButtonEvent> MouseButton;
+
+        /// <summary>
+        /// Text event handler. This event should always used for text input.
+        /// </summary>
         public TextEvent Text;
+
+        /// <summary>
+        /// Mouse wheel handler. Will not occur when outside of the window.
+        /// </summary>
         public MouseWheelEvent MouseWheel;
+        
+        /// <summary>
+        /// Mouse move handler. Will not occur when outside of the window.
+        /// </summary>
         public MouseMoveEvent MouseMove;
 
         public Input()
@@ -102,7 +121,7 @@ namespace Californium
         public Mouse.Button Button { get; protected set; }
         public bool Pressed { get; protected set; }
         public Vector2f Position { get { return Game.Window.MapPixelToCoords(screenPosition, View); } }
-        private Vector2i screenPosition;
+        private readonly Vector2i screenPosition;
 
         public MouseButtonInputArgs(Mouse.Button button, bool pressed, int x, int y)
         {
@@ -116,7 +135,7 @@ namespace Californium
     {
         public int Delta { get; protected set; }
         public Vector2f Position { get { return Game.Window.MapPixelToCoords(screenPosition, View); } }
-        private Vector2i screenPosition;
+        private readonly Vector2i screenPosition;
 
         public MouseWheelInputArgs(int delta, int x, int y)
         {
@@ -128,7 +147,7 @@ namespace Californium
     public class MouseMoveInputArgs : InputArgs
     {
         public Vector2f Position { get { return Game.Window.MapPixelToCoords(screenPosition, View); } }
-        private Vector2i screenPosition;
+        private readonly Vector2i screenPosition;
 
         public MouseMoveInputArgs(int x, int y)
         {

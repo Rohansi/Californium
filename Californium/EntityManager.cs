@@ -62,7 +62,6 @@ namespace Californium
             }
 
             cleanupTimer += GameOptions.Timestep;
-
             if (cleanupTimer >= CleanupEvery)
             {
                 entityGrid.RemoveAll(kv => kv.Value.Count == 0);
@@ -81,7 +80,7 @@ namespace Californium
                 Height = view.Size.Y
             };
 
-            foreach (var e in InArea(screenBounds))
+            foreach (var e in InArea(screenBounds).OrderBy(e => e.Depth))
             {
                 e.Draw(rt);
             }
