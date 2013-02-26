@@ -26,6 +26,9 @@ namespace Californium
             get { return new Stack<State>(StateStack); }
         }
 
+        /// <summary>
+        /// Function to call when the game is lagging. 
+        /// </summary>
         public static Action Lagging;
 
         private static readonly List<State> StateStack;
@@ -39,6 +42,9 @@ namespace Californium
             KeyStates = new bool[(int)Keyboard.Key.KeyCount];
         }
 
+        /// <summary>
+        /// Initialize the game. Call once after modifying GameOptions.
+        /// </summary>
         public static void Initialize()
         {
             var style = Styles.Titlebar | Styles.Close;
@@ -57,6 +63,7 @@ namespace Californium
                 Window.SetIcon(icon.Size.X, icon.Size.Y, icon.CopyToImage().Pixels);
             }
             
+            #region Event Wrappers
             Window.Closed += (sender, args) => Window.Close();
             Window.Resized += (sender, args) => Resize(new Vector2f(args.Width, args.Height));
             Window.MouseButtonPressed += (sender, args) => DispatchEvent(new MouseButtonInputArgs(args.Button, true, args.X, args.Y));
@@ -79,8 +86,12 @@ namespace Californium
                     KeyStates[(int)args.Code] = false;
                 DispatchEvent(new KeyInputArgs(args.Code, false, args.Control, args.Shift));
             };
+            #endregion
         }
 
+        /// <summary>
+        /// Runs the game. This method will return when Exit is called.
+        /// </summary>
         public static void Run()
         {
             var timer = new Stopwatch();
@@ -95,13 +106,14 @@ namespace Californium
                 // Spiral of death fix
                 if (accumulator > (GameOptions.Timestep * GameOptions.MaxUpdatesPerFrame))
                 {
+                    // TODO: provide the dropped time
                     if (Lagging != null)
                         Lagging();
 
                     accumulator = GameOptions.Timestep * GameOptions.MaxUpdatesPerFrame;
                 }
 
-                // Update
+                #region Update
                 while (accumulator >= GameOptions.Timestep)
                 {
                     Window.DispatchEvents();
@@ -117,31 +129,42 @@ namespace Californium
 
                     accumulator -= GameOptions.Timestep;
                 }
+                #endregion
 
-                // Draw
+                #region Draw
+
+                // Find bottom most state that renders. This state will provide the color to clear to.
                 var clearState = StateStack.FindIndex(s => s.InactiveMode.HasFlag(State.UpdateMode.Draw)); 
+
                 for (var i = 0; i < StateStack.Count; i++)
                 {
                     var state = StateStack[i];
 
                     if (i == clearState)
                         Window.Clear(state.ClearColor);
-
+                    
                     if (i != StateStack.Count - 1 && !state.InactiveMode.HasFlag(State.UpdateMode.Draw))
                         continue;
 
                     state.DrawInternal(Window);
                 }
+                #endregion
 
                 Window.Display();
             }
         }
 
+        /// <summary>
+        /// Exit the game.
+        /// </summary>
         public static void Exit()
         {
             Window.Close();
         }
 
+        /// <summary>
+        /// Pops all states off the stack and pushes one onto it.
+        /// </summary>
         public static void SetState(State state)
         {
             foreach (var s in StateStack)
@@ -153,12 +176,18 @@ namespace Californium
             PushState(state);
         }
 
+        /// <summary>
+        /// Pushes a state onto the state stack.
+        /// </summary>
         public static void PushState(State state)
         {
             state.Enter();
             StateStack.Add(state);
         }
 
+        /// <summary>
+        /// Pops a state off the state stack.
+        /// </summary>
         public static void PopState()
         {
             var last = StateStack.Count - 1;

@@ -1,7 +1,5 @@
 Documentation
 
-More meaningful Camera class (zoom get/set, optional rounding, etc.)
-
 Builtin Framerate calculation
 
 Particle engine

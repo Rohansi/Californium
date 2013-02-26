@@ -22,7 +22,14 @@ namespace Californium
         public EntityManager Entities;
         public TileMap Map;
 
+        /// <summary>
+        /// Functions to call for this state when it is not the active state.
+        /// </summary>
         public UpdateMode InactiveMode { get; protected set; }
+
+        /// <summary>
+        /// Background color of the state. Only valid for the bottom most state with rendering enabled (UpdateMode.Draw).
+        /// </summary>
         public Color ClearColor { get; protected set; }
 
         /// <summary>
@@ -52,7 +59,15 @@ namespace Californium
         /// </summary>
         public virtual void InitializeCamera()
         {
+            var o = Camera;
             Camera = new Camera(Game.DefaultView);
+
+            if (o != null)
+            {
+                // Restore old positions. Fixes an issue with smooth cameras and window resizing
+                Camera.Position = o.Position;
+                Camera.ActualPosition = o.ActualPosition;
+            }
         }
 
         /// <summary>

@@ -82,7 +82,7 @@ namespace Example.States
         public override void InitializeCamera()
         {
             base.InitializeCamera();
-            Camera.Zoom(0.5f);
+            Camera.Zoom = 0.5f;
         }
     }
 }
