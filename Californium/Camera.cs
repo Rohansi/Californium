@@ -14,7 +14,7 @@ namespace Californium
         /// <summary>
         /// Toggle for smooth camera transition
         /// </summary>
-        public bool Smooth = true;
+        public bool Smooth = false;
 
         /// <summary>
         /// Smoothness determines how quickly the transition will take place. Higher smoothness will reach the target position faster.

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using SFML.Graphics;
@@ -19,6 +20,8 @@ namespace Californium
         private readonly State parent;
 
         private Entity currentEntity;
+
+        private readonly Random rand = new Random();
 
         public EntityManager(State parent)
         {
@@ -80,7 +83,8 @@ namespace Californium
                 Height = view.Size.Y
             };
 
-            foreach (var e in InArea(screenBounds).OrderBy(e => e.Depth))
+            // DepthRandomize helps make depth more consistent by eliminating entities with the same depth value
+            foreach (var e in InArea(screenBounds).OrderBy(e => (float)e.Depth + e.DepthRandomize))
             {
                 e.Draw(rt);
             }
@@ -91,6 +95,7 @@ namespace Californium
             e.Parent = parent;
             e.Node = entities.AddLast(e);
             e.GridCoordinate = new Vector2i((int)e.Position.X / GameOptions.EntityGridSize, (int)e.Position.Y / GameOptions.EntityGridSize);
+            e.DepthRandomize = (float)rand.NextDouble();
 
             GridAdd(e);
 

@@ -8,6 +8,7 @@ namespace Californium
     {
         internal LinkedListNode<Entity> Node;
         internal Vector2i GridCoordinate;
+        internal float DepthRandomize = 0;
         private Input input;
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Californium
         }
 
         public bool Solid = false;
-        public float Depth = 0;
+        public short Depth = 0;
         public Vector2f Position = new Vector2f();
         public Vector2f Origin = new Vector2f();
         public Vector2f Size = new Vector2f();

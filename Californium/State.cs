@@ -5,6 +5,9 @@ namespace Californium
 {
     public abstract class State
     {
+        /// <summary>
+        /// Flags that determine the enabled functionality of a state.
+        /// </summary>
         [Flags]
         public enum UpdateMode
         {
@@ -97,6 +100,14 @@ namespace Californium
                 Map.Draw(rt);
 
             Entities.Draw(rt);
+        }
+
+        /// <summary>
+        /// Called when the user attempts to close the game. If all states return true, Game.Exit will be called.
+        /// </summary>
+        public virtual bool ExitRequested()
+        {
+            return true;
         }
 
         internal bool ProcessEvent(InputArgs args)

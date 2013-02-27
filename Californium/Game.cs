@@ -27,14 +27,15 @@ namespace Californium
         }
 
         /// <summary>
-        /// Function to call when the game is lagging. 
+        /// Function to call when the game is lagging. Provides the amount of time that was dropped.
         /// </summary>
-        public static Action Lagging;
+        public static Action<float> Lagging;
 
         private static readonly List<State> StateStack;
         private static readonly bool[] KeyStates;
 
         private static Vector2f size;
+        private static bool running;
 
         static Game()
         {
@@ -52,6 +53,7 @@ namespace Californium
                 style |= Styles.Resize;
 
             size = new Vector2f(GameOptions.Width, GameOptions.Height);
+            running = true;
 
             Window = new RenderWindow(new VideoMode(GameOptions.Width, GameOptions.Height), GameOptions.Caption, style);
             Window.SetFramerateLimit(GameOptions.Framerate);
@@ -64,7 +66,7 @@ namespace Californium
             }
             
             #region Event Wrappers
-            Window.Closed += (sender, args) => Window.Close();
+            Window.Closed += (sender, args) => Exit(true);
             Window.Resized += (sender, args) => Resize(new Vector2f(args.Width, args.Height));
             Window.MouseButtonPressed += (sender, args) => DispatchEvent(new MouseButtonInputArgs(args.Button, true, args.X, args.Y));
             Window.MouseButtonReleased += (sender, args) => DispatchEvent(new MouseButtonInputArgs(args.Button, false, args.X, args.Y));
@@ -97,20 +99,20 @@ namespace Californium
             var timer = new Stopwatch();
             double accumulator = 0;
 
-            while (Window.IsOpen())
+            while (running)
             {
                 var time = timer.Elapsed.TotalSeconds;
                 timer.Restart();
                 accumulator += time;
                 
                 // Spiral of death fix
-                if (accumulator > (GameOptions.Timestep * GameOptions.MaxUpdatesPerFrame))
+                var lagThreshold = GameOptions.Timestep * GameOptions.MaxUpdatesPerFrame;
+                if (accumulator > lagThreshold)
                 {
-                    // TODO: provide the dropped time
                     if (Lagging != null)
-                        Lagging();
+                        Lagging((float)accumulator - lagThreshold);
 
-                    accumulator = GameOptions.Timestep * GameOptions.MaxUpdatesPerFrame;
+                    accumulator = lagThreshold;
                 }
 
                 #region Update
@@ -152,14 +154,24 @@ namespace Californium
 
                 Window.Display();
             }
+
+            Window.Close();
         }
 
         /// <summary>
-        /// Exit the game.
+        /// Exit the game. State.ExitRequested will only be called if userTriggered is true.
         /// </summary>
-        public static void Exit()
+        public static void Exit(bool userTriggered = false)
         {
-            Window.Close();
+            if (userTriggered)
+            {
+                if (StateStack.All(s => s.ExitRequested()))
+                    running = false;
+            }
+            else
+            {
+                running = false;
+            }
         }
 
         /// <summary>
