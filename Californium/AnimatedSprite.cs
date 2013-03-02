@@ -37,6 +37,15 @@ namespace Californium
             set { Sprite.Origin = value; }
         }
 
+        public Color Color
+        {
+            get { return Sprite.Color; }
+            set { Sprite.Color = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the index of current displayed frame.
+        /// </summary>
         public int CurrentFrame
         { 
             get { return currentFrame; }
@@ -47,7 +56,15 @@ namespace Californium
             } 
         }
 
+        /// <summary>
+        /// Time spent on a frame before switching to the next one.
+        /// </summary>
         public float FrameTime;
+
+        /// <summary>
+        /// Toggle for automatic frame changes based on FrameTime.
+        /// </summary>
+        public bool Enabled = true;
 
         public AnimatedSprite(Texture texture, int frameWidth, int frameHeight, float frameTime)
         {
@@ -62,8 +79,14 @@ namespace Californium
             CurrentFrame = 0;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Update()
         {
+            if (!Enabled)
+                return;
+
             elapsedTime += GameOptions.Timestep;
 
             while (elapsedTime >= FrameTime)
