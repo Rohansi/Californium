@@ -193,8 +193,8 @@ namespace Californium
         /// </summary>
         public static void PushState(State state)
         {
-            state.Enter();
             StateStack.Add(state);
+            state.Enter();
         }
 
         /// <summary>
