@@ -9,9 +9,6 @@ namespace Example
 
         static void Main()
         {
-            // Tiles are 8x8
-            GameOptions.TileSize = 8;
-
             // 720p window size by default
             GameOptions.Width = 1280;
             GameOptions.Height = 720;

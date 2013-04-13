@@ -78,16 +78,6 @@
         public static string FontLocation = "Assets/Font/";
 
         /// <summary>
-        /// Size of tiles in pixels
-        /// </summary>
-        public static int TileSize = 16;
-
-        /// <summary>
-        /// Size of TileMap chunks (in tiles), adjusting will affect performance
-        /// </summary>
-        public static int TileChunkSize = 32;
-
-        /// <summary>
         /// Size of EntityManager cells, adjusting will affect performance
         /// </summary>
         public static int EntityGridSize = 64;

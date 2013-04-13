@@ -185,7 +185,7 @@ namespace Example.Entities
         {
             // This PlaceFree function is used over the default because jumpthrough tiles create an
             // extra condition for it to consider.
-            TileMap.CollisionCondition cond = (tile, bounds, collisionBounds) =>
+            TileMap<Tile>.CollisionCondition cond = (tile, bounds, collisionBounds) =>
             {
                 // If the tile is not a jumpthrough tile then there was a collision
                 if (tile.UserData == null)

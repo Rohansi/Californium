@@ -24,7 +24,7 @@ namespace Example.States
             const int height = 100;
 
             // Initialize the state's tilemap
-            Map = new TileMap(width, height, Assets.LoadTexture("Tiles.png"));
+            Map = new ChunkedTileMap(width, height, Assets.LoadTexture("Tiles.png"), 8);
 
             // Fill the TileMap with random tiles
             for (var y = 0; y < height; y++)
@@ -52,7 +52,7 @@ namespace Example.States
             // Create a bunch of ramdom coins around the map
             for (var i = 0; i < 500; i++)
             {
-                Entities.Add(new Coin(random.Next(width * GameOptions.TileSize), random.Next(height * GameOptions.TileSize)));
+                Entities.Add(new Coin(random.Next(width * 8), random.Next(height * 8)));
             }
 
             // Pressing LMB will erase the tile that was clicked
@@ -60,8 +60,8 @@ namespace Example.States
             {
                 if (!args.Pressed) return true;
 
-                var x = (int)args.Position.X / GameOptions.TileSize;
-                var y = (int)args.Position.Y / GameOptions.TileSize;
+                var x = (int)args.Position.X / 8;
+                var y = (int)args.Position.Y / 8;
 
                 if (x >= 0 && x < Map.Width && y >= 0 && y < Map.Height)
                     Map[x, y] = new Tile(500, false);

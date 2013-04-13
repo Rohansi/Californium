@@ -23,7 +23,7 @@ namespace Californium
 
         public Camera Camera;
         public EntityManager Entities;
-        public TileMap Map;
+        public TileMap<Tile> Map;
 
         /// <summary>
         /// Functions to call for this state when it is not the active state.
