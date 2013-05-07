@@ -13,7 +13,3 @@ Make events function like all other libraries (use real events, cancel from Even
 Improve tweening
 
 GUI
-
-Issues
----------------
-- Scaling bug related to odd window sizes

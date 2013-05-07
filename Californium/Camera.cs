@@ -69,18 +69,25 @@ namespace Californium
             {
                 ActualPosition = Position;
             }
-
-            // TODO: round only works well on a zoom of 1 but it should work on most
-            if (RoundPosition)
-            {
-                ActualPosition.X = (float)Math.Round(ActualPosition.X);
-                ActualPosition.Y = (float)Math.Round(ActualPosition.Y);
-            }
         }
 
         public void Apply(RenderTarget rt)
         {
-            View.Center = ActualPosition;
+            var center = ActualPosition;
+
+            if (RoundPosition)
+            {
+                var pxSize = 1 * Zoom;
+                center.X = Utility.RoundToNearest(ActualPosition.X, pxSize);
+                center.Y = Utility.RoundToNearest(ActualPosition.Y, pxSize);
+            }
+
+            // offset fixes texture coord rounding
+            var offset = 0.25f * Zoom; 
+            center.X += offset;
+            center.Y += offset;
+
+            View.Center = center;
             rt.SetView(View);
         }
     }

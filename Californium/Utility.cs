@@ -39,6 +39,11 @@ namespace Californium
             return new Vector2f((float)Math.Cos(dir) * len, (float)-Math.Sin(dir) * len);
         }
 
+        public static float RoundToNearest(float value, float factor)
+        {
+            return (float)Math.Round(value / factor) * factor;
+        }
+
         public static void RemoveAll<TKey, TValue>(this Dictionary<TKey, TValue> dict, Func<KeyValuePair<TKey, TValue>, bool> match)
         {
             foreach (var cur in dict.Where(match).ToList())

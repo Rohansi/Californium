@@ -63,8 +63,8 @@ namespace Californium
                         var itexY = (tiles[x, y].Index / tileMapWidth) * tileSize;
 
                         // HACK: SFML's weird rendering
-                        var texX = itexX + 0.01f;
-                        var texY = itexY - 0.01f;
+                        var texX = itexX/* + 0.01f*/;
+                        var texY = itexY/* - 0.01f*/;
 
                         vertexArray[last + 0] = new Vertex(new Vector2f(x * tileSize, y * tileSize),
                                                            new Vector2f(texX, texY));
