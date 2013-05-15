@@ -155,6 +155,11 @@ namespace Californium
                 Window.Display();
             }
 
+            while (StateStack.Count > 0)
+            {
+                PopState();
+            }
+
             Window.Close();
         }
 
