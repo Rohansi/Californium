@@ -341,6 +341,9 @@
         <member name="F:SFML.Graphics.Color.Cyan">
             <summary>Predefined cyan color</summary>
         </member>
+        <member name="F:SFML.Graphics.Color.Transparent">
+            <summary>Predefined (black) transparent color</summary>
+        </member>
         <member name="T:SFML.Graphics.Context">
             <summary>
             This class defines
