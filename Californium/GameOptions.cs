@@ -58,29 +58,24 @@
         public static float SoundVolume = 100;
 
         /// <summary>
-        /// Base path to load assets from
-        /// </summary>
-        public static string BasePath = "Assets/";
-
-        /// <summary>
         /// Folder to load textures from
         /// </summary>
-        public static string TextureLocation = BasePath + "Texture/";
+        public static string TextureLocation = "Assets/Texture/";
 
         /// <summary>
         /// Folder to load sounds from
         /// </summary>
-        public static string SoundLocation = BasePath + "Sound/";
+        public static string SoundLocation = "Assets/Sound/";
 
         /// <summary>
         /// Folder to load music from
         /// </summary>
-        public static string MusicLocation = BasePath + "Music/";
+        public static string MusicLocation = "Assets/Music/";
 
         /// <summary>
         /// Folder to load fonts from
         /// </summary>
-        public static string FontLocation = BasePath + "Font/";
+        public static string FontLocation = "Assets/Font/";
 
         /// <summary>
         /// Size of EntityManager cells, adjusting will affect performance
