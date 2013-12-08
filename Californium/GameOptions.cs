@@ -58,26 +58,6 @@
         public static float SoundVolume = 100;
 
         /// <summary>
-        /// Folder to load textures from
-        /// </summary>
-        public static string TextureLocation = "Assets/Texture/";
-
-        /// <summary>
-        /// Folder to load sounds from
-        /// </summary>
-        public static string SoundLocation = "Assets/Sound/";
-
-        /// <summary>
-        /// Folder to load music from
-        /// </summary>
-        public static string MusicLocation = "Assets/Music/";
-
-        /// <summary>
-        /// Folder to load fonts from
-        /// </summary>
-        public static string FontLocation = "Assets/Font/";
-
-        /// <summary>
         /// Size of EntityManager cells, adjusting will affect performance
         /// </summary>
         public static int EntityGridSize = 64;
