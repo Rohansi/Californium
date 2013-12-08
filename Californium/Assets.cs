@@ -15,6 +15,31 @@ namespace Californium
         private static Music currentMusic;
 
         /// <summary>
+        /// Base Folder to load assets from
+        /// </summary>
+        public static string BaseLocation = "Assets/";
+
+        /// <summary>
+        /// Folder to load textures from
+        /// </summary>
+        public static string TextureLocation = "Textures/";
+
+        /// <summary>
+        /// Folder to load sounds from
+        /// </summary>
+        public static string SoundLocation = "Sounds/";
+
+        /// <summary>
+        /// Folder to load music from
+        /// </summary>
+        public static string MusicLocation = "Musics/";
+
+        /// <summary>
+        /// Folder to load fonts from
+        /// </summary>
+        public static string FontLocation = "Fonts/";
+
+        /// <summary>
         /// Loads a texture from the base texture directory. LoadTexture will cache textures by name.
         /// </summary>
         public static Texture LoadTexture(string name)
@@ -24,7 +49,7 @@ namespace Californium
             if (Textures.TryGetValue(name, out texture))
                 return texture;
 
-            texture = new Texture(Path.Combine(GameOptions.TextureLocation, name));
+            texture = new Texture(Path.Combine(BaseLocation + TextureLocation, name));
             Textures.Add(name, texture);
 
             return texture;
@@ -40,7 +65,7 @@ namespace Californium
             if (Fonts.TryGetValue(name, out font))
                 return font;
 
-            font = new Font(Path.Combine(GameOptions.FontLocation, name));
+            font = new Font(Path.Combine(BaseLocation + FontLocation, name));
             Fonts.Add(name, font);
 
             return font;
@@ -55,7 +80,7 @@ namespace Californium
 
             if (!Buffers.TryGetValue(name, out soundBuffer))
             {
-                soundBuffer = new SoundBuffer(Path.Combine(GameOptions.SoundLocation, name));
+                soundBuffer = new SoundBuffer(Path.Combine(BaseLocation + SoundLocation, name));
                 Buffers.Add(name, soundBuffer);
             }
 
@@ -84,7 +109,7 @@ namespace Californium
         {
             var state = 0;
             var tween = Tween.Create(TweenType.OutQuad, 0, GameOptions.MusicVolume, 0.5f, () => state = 1);
-            var music = new Music(Path.Combine(GameOptions.MusicLocation, name));
+            var music = new Music(Path.Combine(BaseLocation + MusicLocation, name));
             var watch = new Stopwatch();
 
             currentMusic = music;
