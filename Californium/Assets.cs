@@ -49,7 +49,7 @@ namespace Californium
             if (Textures.TryGetValue(name, out texture))
                 return texture;
 
-            texture = new Texture(Path.Combine(BaseLocation + TextureLocation, name));
+            texture = new Texture(Path.Combine(BaseLocation, TextureLocation, name));
             Textures.Add(name, texture);
 
             return texture;
@@ -65,7 +65,7 @@ namespace Californium
             if (Fonts.TryGetValue(name, out font))
                 return font;
 
-            font = new Font(Path.Combine(BaseLocation + FontLocation, name));
+            font = new Font(Path.Combine(BaseLocation, FontLocation, name));
             Fonts.Add(name, font);
 
             return font;
@@ -80,7 +80,7 @@ namespace Californium
 
             if (!Buffers.TryGetValue(name, out soundBuffer))
             {
-                soundBuffer = new SoundBuffer(Path.Combine(BaseLocation + SoundLocation, name));
+                soundBuffer = new SoundBuffer(Path.Combine(BaseLocation, SoundLocation, name));
                 Buffers.Add(name, soundBuffer);
             }
 
@@ -109,7 +109,7 @@ namespace Californium
         {
             var state = 0;
             var tween = Tween.Create(TweenType.OutQuad, 0, GameOptions.MusicVolume, 0.5f, () => state = 1);
-            var music = new Music(Path.Combine(BaseLocation + MusicLocation, name));
+            var music = new Music(Path.Combine(BaseLocation, MusicLocation, name));
             var watch = new Stopwatch();
 
             currentMusic = music;
