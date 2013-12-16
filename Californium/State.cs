@@ -36,6 +36,11 @@ namespace Californium
         public Color ClearColor { get; protected set; }
 
         /// <summary>
+        /// Overlay states are active when on top of the stack. The following non-overlay state will also be active.
+        /// </summary>
+        public bool IsOverlay { get; protected set; }
+
+        /// <summary>
         /// Gets the state's associated Input instance. Handlers should return true if the event was used or false if it was ignored. 
         /// </summary>
         public Input Input
@@ -46,7 +51,7 @@ namespace Californium
         /// <summary>
         /// Returns true if this State is at the top of the State stack.
         /// </summary>
-        public bool Active
+        public bool IsActive
         {
             get { return Game.IsActive(this); }
         }
@@ -55,6 +60,7 @@ namespace Californium
         {
             Entities = new EntityManager(this);
             InactiveMode = UpdateMode.All;
+            IsOverlay = false;
         }
 
         /// <summary>

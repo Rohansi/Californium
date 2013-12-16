@@ -12,6 +12,7 @@ namespace Example.States
 
         public Example()
         {
+            InactiveMode = UpdateMode.Draw;
             ClearColor = new Color(100, 149, 237);
 
             // Create our player and add it to the state
@@ -69,7 +70,16 @@ namespace Example.States
                 // Tile 500 does not exist on the tile atlas and will render nothing
 
                 return true;
-                
+
+            };
+
+            Input.Key[Keyboard.Key.Space] = args =>
+            {
+                if (!args.Pressed)
+                    return true;
+
+                Game.PushState(new Pause());
+                return true;
             };
         }
 

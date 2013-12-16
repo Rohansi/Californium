@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -94,20 +91,22 @@ namespace Californium
         }
 
         private readonly int chunkSize;
+        private readonly int chunksWidth;
+        private readonly int chunksHeight;
         private readonly Chunk[,] chunks;
 
         public ChunkedTileMap(int width, int height, Texture texture, int tileSize, int chunkSize = 32)
             : base(width, height, tileSize)
         {
             this.chunkSize = chunkSize;
-            var chunkWidth = (width / chunkSize) + 1;
-            var chunkHeight = (height / chunkSize) + 1;
+            chunksWidth = (width / chunkSize) + 1;
+            chunksHeight = (height / chunkSize) + 1;
 
-            chunks = new Chunk[chunkWidth, chunkHeight];
+            chunks = new Chunk[chunksWidth, chunksHeight];
 
-            for (var y = 0; y < chunkHeight; y++)
+            for (var y = 0; y < chunksHeight; y++)
             {
-                for (var x = 0; x < chunkWidth; x++)
+                for (var x = 0; x < chunksWidth; x++)
                 {
                     chunks[x, y] = new Chunk(x, y, Tiles, TileSize, chunkSize, texture);
                 }
@@ -123,12 +122,14 @@ namespace Californium
             }
         }
 
-        public override void Render(RenderTarget rt, int startX, int startY, int endX, int endY)
+        public override void Draw(RenderTarget rt)
         {
-            startX /= chunkSize;
-            startY /= chunkSize;
-            endX = (endX / chunkSize) + 1;
-            endY = (endY / chunkSize) + 1;
+            var region = CalculateDrawRegion(rt);
+
+            var startX = Math.Max(0, region.Left / chunkSize);
+            var startY = Math.Max(0, region.Top / chunkSize);
+            var endX = Math.Min(chunksWidth, startX + (region.Width / chunkSize) + 2);
+            var endY = Math.Min(chunksHeight, startY + (region.Height / chunkSize) + 2);
 
             for (var y = startY; y < endY; y++)
             {

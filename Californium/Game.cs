@@ -121,11 +121,9 @@ namespace Californium
                     Window.DispatchEvents();
                     Timer.Update();
 
-                    for (var i = 0; i < StateStack.Count; i++)
+                    foreach (var state in StateStack)
                     {
-                        var state = StateStack[i];
-
-                        if (i == StateStack.Count - 1 || state.InactiveMode.HasFlag(State.UpdateMode.Update))
+                        if (state.IsActive || state.InactiveMode.HasFlag(State.UpdateMode.Update))
                             state.UpdateInternal();
                     }
 
@@ -136,16 +134,14 @@ namespace Californium
                 #region Draw
 
                 // Find bottom most state that renders. This state will provide the color to clear to.
-                var clearState = StateStack.FindIndex(s => s.InactiveMode.HasFlag(State.UpdateMode.Draw)); 
+                var clearState = StateStack.Find(s => s.InactiveMode.HasFlag(State.UpdateMode.Draw)); 
 
-                for (var i = 0; i < StateStack.Count; i++)
+                foreach (var state in StateStack)
                 {
-                    var state = StateStack[i];
-
-                    if (i == clearState)
+                    if (state == clearState)
                         Window.Clear(state.ClearColor);
-                    
-                    if (i != StateStack.Count - 1 && !state.InactiveMode.HasFlag(State.UpdateMode.Draw))
+
+                    if (!state.IsActive && !state.InactiveMode.HasFlag(State.UpdateMode.Draw))
                         continue;
 
                     state.DrawInternal(Window);
@@ -219,7 +215,7 @@ namespace Californium
                 var state = StateStack[i];
 
                 args.View = state.Camera.View;
-                if (StateStack[i].ProcessEvent(args))
+                if ((state.IsActive || state.InactiveMode.HasFlag(State.UpdateMode.Input)) && state.ProcessEvent(args))
                     return;
             }
         }
@@ -236,7 +232,10 @@ namespace Californium
 
         internal static bool IsActive(State state)
         {
-            return StateStack.IndexOf(state) == (StateStack.Count - 1);
+            if (state.IsOverlay)
+                return StateStack.IndexOf(state) == (StateStack.Count - 1);
+
+            return StateStack.FindLast(s => !s.IsOverlay) == state;
         }
     }
 }

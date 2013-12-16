@@ -64,21 +64,26 @@ namespace Californium
             set { Tiles[x, y] = value; }
         }
 
-        public void Draw(RenderTarget rt)
+        /// <summary>
+        /// Calculates the tile region that a view covers.
+        /// </summary>
+        public IntRect CalculateDrawRegion(RenderTarget rt)
         {
             var view = rt.GetView();
+            var center = view.Center;
+            var size = view.Size;
 
-            var startX = (int)Math.Max(0, (view.Center.X - (view.Size.X / 2)) / TileSize);
-            var startY = (int)Math.Max(0, (view.Center.Y - (view.Size.Y / 2)) / TileSize);
-            var endX = (int)Math.Ceiling(Math.Min(Width, startX + 1 + (view.Size.X / TileSize)));
-            var endY = (int)Math.Ceiling(Math.Min(Height, startY + 1 + (view.Size.Y / TileSize)));
+            var startX = (int)Math.Max(0, (center.X - (size.X / 2)) / TileSize);
+            var startY = (int)Math.Max(0, (center.Y - (size.Y / 2)) / TileSize);
+            var endX = (int)Math.Min(Width, (center.X + (size.X / 2)) / TileSize);
+            var endY = (int)Math.Min(Height, (center.Y + (size.Y / 2)) / TileSize);
 
-            Render(rt, startX, startY, endX, endY);
+            return new IntRect(startX, startY, endX - startX, endY - startY);
         }
 
-        public virtual void Render(RenderTarget rt, int startX, int startY, int endX, int endY)
+        public virtual void Draw(RenderTarget rt)
         {
-
+            
         }
 
         public bool PlaceFree(FloatRect r, CollisionCondition cond = null)

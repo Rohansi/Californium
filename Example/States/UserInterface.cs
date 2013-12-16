@@ -10,6 +10,9 @@ namespace Example.States
         // give us a different camera.
         public UserInterface()
         {
+            InactiveMode = UpdateMode.Draw;
+            IsOverlay = true;
+
             // Create and register our fancy score display
             Entities.Add(new Entities.ScorePanel());
         }
