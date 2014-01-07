@@ -134,7 +134,7 @@ namespace Californium
                 #region Draw
 
                 // Find bottom most state that renders. This state will provide the color to clear to.
-                var clearState = StateStack.Find(s => s.InactiveMode.HasFlag(State.UpdateMode.Draw)); 
+                var clearState = StateStack.Find(s => s.IsActive || s.InactiveMode.HasFlag(State.UpdateMode.Draw));
 
                 foreach (var state in StateStack)
                 {
