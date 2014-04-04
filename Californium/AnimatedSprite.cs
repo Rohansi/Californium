@@ -72,7 +72,7 @@ namespace Californium
             this.frameHeight = frameHeight;
 
             Sprite = new Sprite(texture);
-            totalFrames = (int)(texture.Size.X / frameWidth) - 1;
+            totalFrames = (int)(texture.Size.X / frameWidth);
             elapsedTime = 0;
 
             FrameTime = frameTime;
