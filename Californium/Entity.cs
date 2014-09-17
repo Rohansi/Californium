@@ -51,12 +51,14 @@ namespace Californium
         }
 
         /// <summary>
-        /// Called when the Entity is being added to an EntityManager. Unlike the constructor, Parent is valid when Create is called.
+        /// Called when the Entity is being added to an EntityManager.
+        /// Unlike the constructor, Parent is valid when Create is called.
         /// </summary>
         public virtual void Create() { }
 
         /// <summary>
         /// Called when the Entity is being removed from an EntityManager.
+        /// Parent is valid when Destroy is called.
         /// </summary>
         public virtual void Destroy() { }
 
