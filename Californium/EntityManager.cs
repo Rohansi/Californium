@@ -107,13 +107,13 @@ namespace Californium
 
         public void Remove(Entity e)
         {
+            e.Destroy();
+            
             GridRemove(e);
             entities.Remove(e.Node);
 
             if (e.Input != null)
                 inputEntities.Remove(e);
-
-            e.Destroy();
         }
 
         public void Clear()
