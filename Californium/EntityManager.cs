@@ -101,7 +101,7 @@ namespace Californium
 
             e.Create();
 
-            if (e.Input != null)
+            if (e.InputInstance != null)
                 inputEntities.Add(e);
         }
 
@@ -112,7 +112,7 @@ namespace Californium
             GridRemove(e);
             entities.Remove(e.Node);
 
-            if (e.Input != null)
+            if (e.InputInstance != null)
                 inputEntities.Remove(e);
         }
 

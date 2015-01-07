@@ -9,7 +9,7 @@ namespace Californium
         internal LinkedListNode<Entity> Node;
         internal Vector2i GridCoordinate;
         internal float DepthRandomize = 0;
-        private Input input;
+        internal Input InputInstance;
 
         /// <summary>
         /// Gets the entity's parent state
@@ -23,15 +23,15 @@ namespace Californium
         {
             get
             {
-                if (input == null)
+                if (InputInstance == null)
                 {
-                    input = new Input();
+                    InputInstance = new Input();
 
                     if (Parent != null)
                         Parent.Entities.AddInput(this);
                 }
                 
-                return input;
+                return InputInstance;
             }
         }
 
