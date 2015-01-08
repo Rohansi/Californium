@@ -48,37 +48,44 @@ namespace Californium
 
         internal bool ProcessInput(InputArgs args)
         {
-            if (MouseMove != null && args is MouseMoveInputArgs)
+            if (MouseMove != null)
             {
-                var eArgs = (MouseMoveInputArgs)args;
-                return MouseMove(eArgs);
+                var eArgs = args as MouseMoveInputArgs;
+
+                if (eArgs != null)
+                    return MouseMove(eArgs);
             }
-            
-            if (args is KeyInputArgs)
+
+            if (MouseWheel != null)
             {
-                var eArgs = (KeyInputArgs)args;
+                var eArgs = args as MouseWheelInputArgs;
+
+                if (eArgs != null)
+                    return MouseWheel(eArgs);
+            }
+
+            if (Text != null)
+            {
+                var eArgs = args as TextInputArgs;
+
+                if (eArgs != null)
+                    return Text(eArgs);
+            }
+
+            var keyArgs = args as KeyInputArgs;
+            if (keyArgs != null)
+            {
                 KeyEvent e;
+                if (Key.TryGetValue(keyArgs.Key, out e))
+                    return e(keyArgs);
+            }
 
-                if (Key.TryGetValue(eArgs.Key, out e))
-                    return e(eArgs);
-            }
-            else if (Text != null && args is TextInputArgs)
+            var mouseArgs = args as MouseButtonInputArgs;
+            if (mouseArgs != null)
             {
-                var eArgs = (TextInputArgs)args;
-                return Text(eArgs);
-            }
-            else if (args is MouseButtonInputArgs)
-            {
-                var eArgs = (MouseButtonInputArgs)args;
                 MouseButtonEvent e;
-
-                if (MouseButton.TryGetValue(eArgs.Button, out e))
-                    return e(eArgs);
-            }
-            else if (MouseWheel != null && args is MouseWheelInputArgs)
-            {
-                var eArgs = (MouseWheelInputArgs)args;
-                return MouseWheel(eArgs);
+                if (MouseButton.TryGetValue(mouseArgs.Button, out e))
+                    return e(mouseArgs);
             }
 
             return false;
