@@ -6,6 +6,9 @@ namespace Californium
 {
     public class Input
     {
+        public const bool Continue = true;
+        public const bool Block = false;
+
         public delegate bool KeyEvent(KeyInputArgs args);
         public delegate bool TextEvent(TextInputArgs args);
         public delegate bool MouseButtonEvent(MouseButtonInputArgs args);
