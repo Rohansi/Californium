@@ -47,22 +47,69 @@ namespace Californium
         /// </summary>
         public virtual FloatRect BoundingBox
         {
-            get { return new FloatRect(Position.X - (Origin.X * Scale.X), Position.Y - (Origin.Y * Scale.Y), Size.X * Scale.X, Size.Y * Scale.Y); }
+            get
+            {
+                return new FloatRect(
+                    Position.X - (Origin.X * Scale.X),
+                    Position.Y - (Origin.Y * Scale.Y),
+                    Size.X * Scale.X, 
+                    Size.Y * Scale.Y
+                );
+            }
         }
 
         /// <summary>
         /// Called when the Entity is being added to an EntityManager.
         /// Unlike the constructor, Parent is valid when Create is called.
         /// </summary>
-        public virtual void Create() { }
+        public virtual void Create()
+        {
+            
+        }
 
         /// <summary>
         /// Called when the Entity is being removed from an EntityManager.
         /// Parent is valid when Destroy is called.
         /// </summary>
-        public virtual void Destroy() { }
+        public virtual void Destroy()
+        {
+            
+        }
 
-        public virtual void Update() { }
-        public virtual void Draw(RenderTarget rt) { }
+        /// <summary>
+        /// Called one or more times before Draw depending on the current delta.
+        /// This will be called as many times as required to keep the update loop
+        /// in sync with expected time.
+        /// </summary>
+        public virtual void Update()
+        {
+            
+        }
+
+        /// <summary>
+        /// Called once per frame.
+        /// </summary>
+        /// <param name="rt">RenderTarget, passed from engine.</param>
+        public virtual void Draw(RenderTarget rt)
+        {
+            
+        }
+
+        /// <summary>
+        /// Draws a rectangle around the entity as its computed bounding box.
+        /// If any collision is detected the box will be opaque, otherwise it is drawn transparently.
+        /// </summary>
+        /// <param name="rt">RenderTarget, passed from engine.</param>
+        /// <param name="color">Color of bounding box.</param>
+        protected void DrawBoundingBox(RenderTarget rt, Color color)
+        {
+            RectangleShape boundingBox = new RectangleShape(new Vector2f(BoundingBox.Width, BoundingBox.Height))
+            {
+                Position = new Vector2f(BoundingBox.Left, BoundingBox.Top),
+                FillColor = Parent.Entities.PlaceFree(BoundingBox) ? color : new Color(color.R, color.G, color.B, 128)
+            };
+
+            rt.Draw(boundingBox);
+        }
     }
 }
