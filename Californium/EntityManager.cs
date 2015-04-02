@@ -54,7 +54,7 @@ namespace Californium
                 newGridPos.X = (int)e.Position.X / GameOptions.EntityGridSize;
                 newGridPos.Y = (int)e.Position.Y / GameOptions.EntityGridSize;
 
-                if (!e.GridCoordinate.Equals(newGridPos))
+                if (entities.Contains(e) && !e.GridCoordinate.Equals(newGridPos))
                 {
                     GridRemove(e);
                     e.GridCoordinate = newGridPos;
@@ -86,7 +86,9 @@ namespace Californium
             // DepthRandomize helps make depth more consistent by eliminating entities with the same depth value
             foreach (var e in InArea(screenBounds).OrderBy(e => (float)e.Depth + e.DepthRandomize))
             {
+                currentEntity = e;
                 e.Draw(rt);
+                currentEntity = null;
             }
         }
 
@@ -143,9 +145,9 @@ namespace Californium
 
             var pos = new Vector2i();
 
-            for (var y = startY; y < startY + height; y++)
+            for (var y = startY; y <= startY + height; y++)
             {
-                for (var x = startX; x < startX + width; x++)
+                for (var x = startX; x <= startX + width; x++)
                 {
                     pos.X = x;
                     pos.Y = y;
@@ -170,6 +172,11 @@ namespace Californium
             return InArea(rect).All(entity => entity == currentEntity || !entity.Solid || !entity.BoundingBox.Intersects(rect));
         }
 
+        public bool CollidingWith<T>(FloatRect rect)
+        {
+            return InArea(rect).Any(e => e is T && e.BoundingBox.Intersects(rect));
+        }
+
         public IEnumerator<Entity> GetEnumerator()
         {
             var cur = entities.First;
@@ -190,6 +197,7 @@ namespace Californium
         {
             if (inputEntities.Contains(e))
                 return;
+
             inputEntities.Add(e);
         }
 
