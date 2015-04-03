@@ -26,6 +26,8 @@ namespace Californium
             get { return new Stack<State>(StateStack); }
         }
 
+        public static float Framerate { get; private set; }
+
         /// <summary>
         /// Function to call when the game is lagging. Provides the amount of time that was dropped.
         /// </summary>
@@ -36,6 +38,10 @@ namespace Californium
 
         private static Vector2f size;
         private static bool running;
+
+        private static float frameTime;
+        private static float lastFrameTime;
+        private static Stopwatch frameTimer;
 
         static Game()
         {
@@ -64,7 +70,9 @@ namespace Californium
                 var icon = Assets.LoadTexture(GameOptions.Icon);
                 Window.SetIcon(icon.Size.X, icon.Size.Y, icon.CopyToImage().Pixels);
             }
-            
+
+            Framerate = GameOptions.Framerate;
+
             #region Event Wrappers
             Window.Closed += (sender, args) => Exit(true);
             Window.Resized += (sender, args) => Resize(new Vector2f(args.Width, args.Height));
@@ -98,6 +106,10 @@ namespace Californium
         {
             var timer = new Stopwatch();
             double accumulator = 0;
+
+            frameTimer = new Stopwatch();
+            frameTimer.Restart();
+            lastFrameTime = frameTimer.ElapsedMilliseconds;
 
             while (running)
             {
@@ -149,6 +161,17 @@ namespace Californium
                 #endregion
 
                 Window.Display();
+
+                // Calculate framerate
+                float currentFrameTime = 1000.0f / ((frameTime = frameTimer.ElapsedMilliseconds) - lastFrameTime);
+                if (Math.Abs(frameTime - lastFrameTime) > float.Epsilon)
+                {
+                    // NOTE The 50 is not in reference to 50 fps, it's in reference quickly to
+                    //      tween between framerates, to prevent sudden jumps that occur fairly
+                    //      often.
+                    Framerate += (currentFrameTime - Framerate) / 50;
+                    lastFrameTime = frameTime;
+                }
             }
 
             while (StateStack.Count > 0)
