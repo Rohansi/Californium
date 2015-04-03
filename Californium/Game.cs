@@ -62,11 +62,7 @@ namespace Californium
             running = true;
 
             Window = new RenderWindow(new VideoMode(GameOptions.Width, GameOptions.Height), GameOptions.Caption, style);
-            
-            // NOTE It appears that SFML's framerate limiter is inaccurate, it's always half the speed specified.
-            //      This hack is to get around that and request the expected framerate. Because of the way that updating
-            //      is handled this will not affect the timing of anything.
-            Window.SetFramerateLimit(GameOptions.Framerate << 1);
+            Window.SetFramerateLimit(GameOptions.Framerate);
             Window.SetVerticalSyncEnabled(GameOptions.Vsync);
 
             if (!string.IsNullOrWhiteSpace(GameOptions.Icon))
