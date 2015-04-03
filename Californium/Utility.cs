@@ -8,6 +8,34 @@ namespace Californium
 {
     public static class Utility
     {
+        public static FloatRect Translate(this FloatRect value, float x, float y)
+        {
+            return new FloatRect(value.Left + x, value.Top + y, value.Width, value.Height);
+        }
+
+        public static Vector2f Rotate(this Vector2f value, Vector2f origin, float theta)
+        {
+            return new Vector2f(
+                (float)Math.Cos(theta) * (value.X - origin.X) - (float)Math.Sin(theta) * (value.Y - origin.Y) + origin.X,
+                (float)Math.Sin(theta) * (value.X - origin.X) + (float)Math.Cos(theta) * (value.Y - origin.Y) + origin.Y
+            );
+        }
+
+        public static Vector2f ToFloat(this Vector2u value)
+        {
+            return new Vector2f(value.X, value.Y);
+        }
+
+        public static Vector2u ToUnsigned(this Vector2f value)
+        {
+            return new Vector2u((uint)value.X, (uint)value.Y);
+        }
+
+        public static float Lerp(float a, float b, float w)
+        {
+            return a + w * (b - a);
+        }
+
         public static float Clamp(float value, float min, float max)
         {
             return (value < min) ? min : ((value > max) ? max : value);
@@ -82,6 +110,14 @@ namespace Californium
         {
             trans.Position = new Vector2f((float)Math.Round(trans.Position.X), (float)Math.Round(trans.Position.Y));
             trans.Origin = new Vector2f((float)Math.Round(trans.Origin.X), (float)Math.Round(trans.Origin.Y));
+        }
+
+        public static Vector2f Round(this Vector2f value)
+        {
+            return new Vector2f(
+                (float)Math.Round(value.X),
+                (float)Math.Round(value.Y)
+            );
         }
     }
 }
