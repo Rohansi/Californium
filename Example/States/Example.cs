@@ -1,6 +1,7 @@
 ﻿using System;
 using Californium;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 using Example.Entities;
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using SFML.Graphics;
-using SFML.Window;
+using SFML.System;
 
 namespace Californium
 {

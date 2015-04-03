@@ -133,7 +133,7 @@ namespace Californium
                         music.Volume = (float)tween(dt);
                         break;
                     case 1: // normal play
-                        if (music.PlayingOffset.TotalSeconds >= music.Duration.TotalSeconds - 1)
+                        if (music.PlayingOffset.AsSeconds() >= music.Duration.AsSeconds() - 1)
                             state = 2;
                         break;
                     case 2: // setup fadeout

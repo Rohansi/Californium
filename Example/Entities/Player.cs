@@ -2,6 +2,7 @@
 using System.Linq;
 using Californium;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace Example.Entities
