@@ -54,9 +54,8 @@ namespace Californium
                 newGridPos.X = (int)e.Position.X / GameOptions.EntityGridSize;
                 newGridPos.Y = (int)e.Position.Y / GameOptions.EntityGridSize;
 
-                if (entities.Contains(e) && !e.GridCoordinate.Equals(newGridPos))
+                if (!e.GridCoordinate.Equals(newGridPos) && GridRemove(e))
                 {
-                    GridRemove(e);
                     e.GridCoordinate = newGridPos;
                     GridAdd(e);
                 }
@@ -216,12 +215,14 @@ namespace Californium
             list.AddLast(e);
         }
 
-        private void GridRemove(Entity e)
+        private bool GridRemove(Entity e)
         {
             LinkedList<Entity> list;
 
             if (entityGrid.TryGetValue(e.GridCoordinate, out list))
-                list.Remove(e);
+                return list.Remove(e);
+
+            return false;
         }
     }
 }
